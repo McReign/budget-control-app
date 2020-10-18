@@ -22,15 +22,15 @@ const getUsers = require('./controllers/getUsers');
 const router = new Router({ prefix: '/api' });
 
 router.get('/categories', mustBeAuthenticated, getCategories);
-router.get('/me', mustBeAuthenticated, me);
+router.get('/users', mustBeAuthenticated, getUsers);
+router.get('/users/me', mustBeAuthenticated, me);
 router.get('/wallets', mustBeAuthenticated, getWallets);
 router.get('/wallets/:walletId/operations', mustBeAuthenticated, mustBeWalletOwner, getOperations);
 router.get('/notifications', mustBeAuthenticated, getNotifications);
-router.get('/users', mustBeAuthenticated, getUsers);
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/logout', mustBeAuthenticated, logout);
+router.post('/users/register', register);
+router.post('/users/login', login);
+router.post('/users/logout', mustBeAuthenticated, logout);
 router.post('/wallets/:walletId/balance', mustBeAuthenticated, mustBeWalletOwner, setWalletBalance);
 router.post('/wallets/:walletId/operations', mustBeAuthenticated, mustBeWalletOwner, addOperation);
 router.post('/wallets/:walletId/invite', mustBeAuthenticated, mustBeWalletOwner, inviteToWallet);
