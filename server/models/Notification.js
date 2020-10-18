@@ -1,35 +1,28 @@
 const mongoose = require('mongoose');
 const connection = require('../db');
 const NotificationType = require('../constants/notificationType');
+const NotificationModel = require('../constants/notificationModel');
 
 const notificationSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: Object.keys(NotificationType),
+    enum: Object.values(NotificationType),
     required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  from: {
+  content: {
     type: mongoose.Types.ObjectId,
-    ref: 'User',
+    required: true,
+    refPath: 'model',
   },
-  to: {
-    type: mongoose.Types.ObjectId,
-    ref: 'User',
+  model: {
+    type: String,
+    required: true,
+    enum: Object.values(NotificationModel),
   },
-  payload: {
-    type: mongoose.Mixed,
-  }
 });
 
 module.exports = connection.model('Notification', notificationSchema);

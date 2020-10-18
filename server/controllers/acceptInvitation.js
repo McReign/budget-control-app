@@ -1,26 +1,32 @@
-const Wallet = require('../models/Wallet');
 const Notification = require('../models/Notification');
+const Invitation = require('../models/Invitation');
 const mapResponse = require('../mappers/response');
-const NotificationType = require('../constants/notificationType');
 
 module.exports = async function(ctx) {
     const { invitationId } = ctx.params;
 
-    const notifications = await Notification.find({ to: ctx.user });
-    const notification = notifications.find(notification => notification.id === invitationId);
+    const invitation = await Invitation.findById(invitationId)
+        .populate('wallet')
+        .populate('to')
+        .populate('from');
 
-    if (!notification) {
-        ctx.throw(403, 'Уведомление не принадлежит текущему пользователю');
+    if(!invitation) {
+        ctx.throw(404, 'Приглашения не найдено');
     }
 
-    if (notification.type !== NotificationType.INVITATION) {
-        ctx.throw(400, 'Уведомление не является приглашением');
+    if (invitation.to.id !== ctx.user.id) {
+        ctx.throw(403, 'Приглашение не принадлежит текущему пользователю');
     }
 
-    const wallet = await Wallet.findById(notification.payload.wallet);
-    wallet.users = [...wallet.users, notification.to];
+    if (invitation.wallet.users.includes(ctx.user.id)) {
+        ctx.throw(400, 'Пользователь уже находится в данном кошельке');
+    }
 
-    await Promise.all([notification.remove(), wallet.save()]);
+    const notification = await Notification.findOne({ content: invitation });
+
+    invitation.wallet.users = [...invitation.wallet.users, ctx.user.id];
+
+    await Promise.all([notification.remove(), invitation.remove(), invitation.wallet.save()]);
 
     ctx.body = mapResponse({ success: true });
 };

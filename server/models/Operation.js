@@ -5,7 +5,7 @@ const OperationType = require('../constants/operationType');
 const operationSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: Object.keys(OperationType),
+    enum: Object.values(OperationType),
     required: true,
   },
   amount: {

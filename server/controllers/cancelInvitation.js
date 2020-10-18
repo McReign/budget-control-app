@@ -1,21 +1,23 @@
 const Notification = require('../models/Notification');
+const Invitation = require('../models/Invitation');
 const mapResponse = require('../mappers/response');
-const NotificationType = require('../constants/notificationType');
 
 module.exports = async function(ctx) {
     const { invitationId } = ctx.params;
 
-    const notifications = await Notification.find({ to: ctx.user });
-    const notification = notifications.find(notification => notification.id === invitationId);
+    const invitation = await Invitation.findById(invitationId).populate('to').populate('from');
 
-    if (!(notification.to === ctx.user && notification.from === ctx.user)) {
-        ctx.throw(403, 'Уведомление не принадлежит текущему пользователю');
+    if(!invitation) {
+        ctx.throw(404, 'Приглашения не найдено');
     }
 
-    if (notification.type !== NotificationType.INVITATION) {
-        ctx.throw(400, 'Уведомление не является приглашением');
+    if (!(invitation.to.id === ctx.user.id || invitation.from.id === ctx.user.id)) {
+        ctx.throw(403, 'Приглашение не принадлежит текущему пользователю');
     }
 
-    await notification.remove();
+    const notification = await Notification.findOne({ content: invitation });
+
+    await Promise.all([notification.remove(), invitation.remove()]);
+
     ctx.body = mapResponse({ success: true });
 };
