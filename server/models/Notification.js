@@ -13,6 +13,11 @@ const notificationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  to: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
   content: {
     type: mongoose.Types.ObjectId,
     required: true,

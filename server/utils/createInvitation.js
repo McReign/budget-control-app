@@ -9,6 +9,7 @@ module.exports = async function(wallet, to, from) {
     const invitation = new Invitation({ title, wallet, from, to });
     await Notification.create({
         type: NotificationType.INVITATION,
+        to,
         content: invitation,
         model: NotificationModel[NotificationType.INVITATION]
     });

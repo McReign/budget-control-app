@@ -4,7 +4,7 @@ const { mapUserSimple } = require('../mappers/user');
 module.exports = function mapInvitation(invitation) {
     return invitation ? {
         id: invitation.id,
-        title: invitation.type,
+        title: invitation.title,
         wallet: mapWalletSimple(invitation.wallet),
         from: mapUserSimple(invitation.from),
         to: mapUserSimple(invitation.to),
