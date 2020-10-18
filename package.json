@@ -1,0 +1,15 @@
+{
+  "name": "budget-control-app",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/McReign/budget-control-app.git"
+  },
+  "author": "Dmitry Manshin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/McReign/budget-control-app/issues"
+  },
+  "homepage": "https://github.com/McReign/budget-control-app#readme"
+}
