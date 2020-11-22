@@ -1,4 +1,6 @@
-import { combineReducers } from 'redux';
+import { applyMiddleware, combineReducers } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { userReducer } from './modules/user/reducer';
 import { walletsReducer } from './modules/wallets/reducer';
@@ -10,4 +12,9 @@ export const createRootReducer = () => {
         walletsState: walletsReducer,
         categoriesState: categoriesReducer,
     });
+};
+
+export const createEnhancers = () => {
+    const middlewareEnhancer = applyMiddleware(thunkMiddleware);
+    return composeWithDevTools(middlewareEnhancer);
 };

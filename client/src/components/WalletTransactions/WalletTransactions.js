@@ -1,5 +1,5 @@
 import './WalletTransactions.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Col, Row, Tabs, Typography, Empty, Space, message } from 'antd';
 import { ArrowRightOutlined, UserOutlined } from '@ant-design/icons';
@@ -14,17 +14,18 @@ import {
 } from '../../store/modules/wallets/selectors';
 import { withRubleSign } from '../../utils/withRubleSign';
 import { AddButton } from '../AddButton/AddButton';
-import { TransactionModal } from '../TransactionModal/TransactionModal';
+import { TransactionModalEdit } from '../TransactionModal/TransactionModalEdit';
 import { addOperation } from '../../store/modules/wallets/thunks';
 import { ERROR_MESSAGE_DURATION } from '../../constants/errors';
 import { withNumberGroupSeparator } from '../../utils/withNumberGroupSeparator';
 import { toDisplayDate } from '../../utils/toDisplayDate';
 import { userSelector } from '../../store/modules/user/selectors';
+import { TransactionModalView } from '../TransactionModal/TransactionModalView';
 
 export const WalletTransactions = ({ walletId }) => {
     const dispatch = useDispatch();
     const [operationModalVisible, setOperationModalVisible] = useState(false);
-    const [isNewOperation, setIsNewOperation] = useState(false);
+    const [addModalVisible, setAddModalVisible] = useState(false);
     const [openedOperation, setOpenedOperation] = useState(null);
     const currentUser = useSelector(userSelector);
     const isOperationsLoading = useSelector(isLoadingSelector);
@@ -34,24 +35,25 @@ export const WalletTransactions = ({ walletId }) => {
     const incomes = useSelector(walletIncomesSelector)(walletId);
 
     const openAddModal = () => {
-        setIsNewOperation(true);
-        setOperationModalVisible(true);
+        setAddModalVisible(true);
+    };
+
+    const closeAddModal = () => {
+        setAddModalVisible(false);
     };
 
     const openOperation = (operation) => {
-        setIsNewOperation(false);
         setOpenedOperation(operation);
         setOperationModalVisible(true);
     };
 
-    const closeOperationModal = () => {
-        setIsNewOperation(false);
+    const closeOperation = () => {
         setOperationModalVisible(false);
-        setOpenedOperation(null);
+        setTimeout(() => setOpenedOperation(null), 100);
     };
 
     const handleOperationAdd = (operation) => {
-        closeOperationModal();
+        closeAddModal();
         dispatch(addOperation(walletId, operation))
             // .then(closeAddModal)
             .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION));
@@ -66,7 +68,7 @@ export const WalletTransactions = ({ walletId }) => {
             },
             {
                 key: 'expenses',
-                name: 'Траты',
+                name: 'Расходы',
                 transactions: expenses,
             },
             {
@@ -86,6 +88,7 @@ export const WalletTransactions = ({ walletId }) => {
                                     key={transaction.id}
                                     hoverable
                                     size='small'
+                                    onClick={() => openOperation(transaction)}
                                 >
                                     <Row justify='space-between'>
                                         <Col>
@@ -138,12 +141,16 @@ export const WalletTransactions = ({ walletId }) => {
                     </Row>
                 </Col>
                 <AddButton className='wallet-transactions__add-button' onClick={openAddModal} />
-                <TransactionModal
-                    isNew={isNewOperation}
+                <TransactionModalEdit
+                    isNew={true}
+                    visible={addModalVisible}
+                    onCancel={closeAddModal}
+                    onAdd={handleOperationAdd}
+                />
+                <TransactionModalView
                     visible={operationModalVisible}
                     transaction={openedOperation}
-                    onCancel={closeOperationModal}
-                    onAdd={handleOperationAdd}
+                    onCancel={closeOperation}
                 />
             </Row>
         );
@@ -152,7 +159,7 @@ export const WalletTransactions = ({ walletId }) => {
     return (
         <RequestWrapper
             requestStatus={mapStoreRequestStateToRequestStatus(
-                operations && operations.length,
+                operations,
                 isOperationsLoading,
                 operationsError,
             )}

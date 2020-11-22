@@ -7,5 +7,13 @@ export const isLoadingSelector = (state) => {
 };
 
 export const categoriesSelector = (state) => {
-    return state.categoriesState.categories;
+    return state.categoriesState.categories || [];
+};
+
+export const incomeCategoriesSelector = (state) => {
+    return categoriesSelector(state).filter(category => category.type === 'INCOME');
+};
+
+export const expenseCategoriesSelector = (state) => {
+    return categoriesSelector(state).filter(category => category.type === 'EXPENSE');
 };

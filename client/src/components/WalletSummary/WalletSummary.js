@@ -19,7 +19,7 @@ import {
 } from '../../store/modules/wallets/selectors';
 import { withRubleSign } from '../../utils/withRubleSign';
 import { AddButton } from '../AddButton/AddButton';
-import { TransactionModal } from '../TransactionModal/TransactionModal';
+import { TransactionModalEdit } from '../TransactionModal/TransactionModalEdit';
 import { addOperation } from '../../store/modules/wallets/thunks';
 import { ERROR_MESSAGE_DURATION } from '../../constants/errors';
 import { withNumberGroupSeparator } from '../../utils/withNumberGroupSeparator';
@@ -76,7 +76,7 @@ export const WalletSummary = ({ walletId }) => {
         return (
             <Card>
                 <Statistic
-                    title='Траты'
+                    title='Расходы'
                     value={expensesSum}
                     suffix={withRubleSign()}
                     precision={2}
@@ -104,7 +104,7 @@ export const WalletSummary = ({ walletId }) => {
         const tabs = [
             {
                 key: 'expenses',
-                name: 'Траты',
+                name: 'Расходы',
                 categories: usedExpenseCategories,
                 categoriesSums: usedExpenseCategoriesSums,
             },
@@ -161,7 +161,7 @@ export const WalletSummary = ({ walletId }) => {
                     </Row>
                 </Col>
                 <AddButton className='wallet-summary__add-button' onClick={openAddModal} />
-                <TransactionModal
+                <TransactionModalEdit
                     isNew={true}
                     visible={addModalVisible}
                     onCancel={closeAddModal}

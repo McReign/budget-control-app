@@ -1,10 +1,10 @@
 import './TransactionModal.scss';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Col, DatePicker, Form, InputNumber, Modal, Row, Select, Space } from 'antd';
+import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Space } from 'antd';
 import { EMPTY_FIELD_ERROR } from '../../constants/errors';
 import { withRubleSign } from '../../utils/withRubleSign';
-import { categoriesSelector } from '../../store/modules/categories/selectors';
+import { incomeCategoriesSelector, expenseCategoriesSelector } from '../../store/modules/categories/selectors';
 import moment from 'moment';
 
 const generateButtons = (isNew, loading, onSave, onAdd, onCancel) => {
@@ -41,9 +41,11 @@ const generateButtons = (isNew, loading, onSave, onAdd, onCancel) => {
     return buttons;
 };
 
-export const TransactionModal = ({ isNew, transaction, visible, loading, onCancel, onSave, onAdd }) => {
+export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onCancel, onSave, onAdd }) => {
     const [ownTransaction, setOwnTransaction] = useState(transaction || {});
-    const categories = useSelector(categoriesSelector);
+    const incomeCategories = useSelector(incomeCategoriesSelector);
+    const expenseCategories = useSelector(expenseCategoriesSelector);
+
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -56,6 +58,11 @@ export const TransactionModal = ({ isNew, transaction, visible, loading, onCance
     }, [visible]);
 
     const title = isNew ? 'Добавление транзакции' : 'Транзакция';
+
+    const categories = {
+        'INCOME': incomeCategories,
+        'EXPENSE': expenseCategories,
+    };
 
     const buttons = generateButtons(isNew, loading, onSave, onAdd, onCancel);
 
@@ -79,16 +86,25 @@ export const TransactionModal = ({ isNew, transaction, visible, loading, onCance
     };
 
     const handleTypeChange = (type) => {
+        handleCategoryChange([])(null);
         setOwnTransaction(ownTransaction => ({ ...ownTransaction, type }));
     };
 
-    const handleCategoryChange = (categoryId) => {
+    const handleCategoryChange = (categories) => (categoryId) => {
+        if (!categoryId) {
+            setOwnTransaction(ownTransaction => ({ ...ownTransaction, category: null }))
+        }
         const category = categories.find(category => category.id === categoryId);
         setOwnTransaction(ownTransaction => ({ ...ownTransaction, category }));
     };
 
     const handleDateChange = (date) => {
         setOwnTransaction(ownTransaction => ({ ...ownTransaction, date: (date && date.format()) || null }));
+    };
+
+    const handleNoteChange = (e) => {
+        e.persist();
+        setOwnTransaction(ownTransaction => ({ ...ownTransaction, note: e?.target?.value }));
     };
 
     return (
@@ -128,7 +144,7 @@ export const TransactionModal = ({ isNew, transaction, visible, loading, onCance
                                     placeholder={'Тип операции'}
                                     onChange={handleTypeChange}
                                 >
-                                    <Select.Option value='EXPENSE'>Трата</Select.Option>
+                                    <Select.Option value='EXPENSE'>Расход</Select.Option>
                                     <Select.Option value='INCOME'>Доход</Select.Option>
                                 </Select>
                             </Form.Item>
@@ -144,9 +160,9 @@ export const TransactionModal = ({ isNew, transaction, visible, loading, onCance
                                     showSearch
                                     placeholder={'Категория'}
                                     optionFilterProp='children'
-                                    onChange={handleCategoryChange}
+                                    onChange={handleCategoryChange(categories[ownTransaction.type] || [])}
                                 >
-                                    {(categories || []).map(category => (
+                                    {(categories[ownTransaction.type] || []).map(category => (
                                         <Select.Option key={category.id} value={category.id}>
                                             {category.displayName}
                                         </Select.Option>
@@ -167,6 +183,15 @@ export const TransactionModal = ({ isNew, transaction, visible, loading, onCance
                         format={'DD.MM.YYYY'}
                         placeholder={'Дата операции'}
                         onChange={handleDateChange}
+                    />
+                </Form.Item>
+
+                <Form.Item label="Заметка" name="note">
+                    <Input.TextArea
+                        value={ownTransaction.note}
+                        placeholder={'Заметка'}
+                        rows={2}
+                        onChange={handleNoteChange}
                     />
                 </Form.Item>
 

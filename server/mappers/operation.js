@@ -9,6 +9,7 @@ module.exports = function mapOperation(operation) {
         balance: operation.balance,
         amount: operation.amount,
         date: operation.date,
+        note: operation.note,
         category: mapCategory(operation.category),
         wallet: mapWalletSimple(operation.wallet),
         user: mapUserSimple(operation.user),

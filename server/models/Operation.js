@@ -27,6 +27,9 @@ const operationSchema = new mongoose.Schema({
   user: {
     type: mongoose.Types.ObjectId,
     ref: 'User',
+  },
+  note: {
+    type: String,
   }
 });
 

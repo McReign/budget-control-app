@@ -7,7 +7,7 @@ const mapOperation = require('../mappers/operation');
 module.exports = async function(ctx) {
     const { wallets, user, params, request } = ctx;
     const { walletId } = params;
-    const { type, amount, date, categoryId } = request.body;
+    const { type, amount, date, categoryId, note } = request.body;
 
     const wallet = wallets.find(wallet => wallet.id === walletId);
 
@@ -20,6 +20,7 @@ module.exports = async function(ctx) {
         user,
         category,
         date,
+        note,
     });
 
     wallet.balance = wallet.balance + (getOperationSign(type) * amount);
