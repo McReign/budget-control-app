@@ -1,0 +1,15 @@
+.wallet-transactions {
+  position: relative;
+
+  .ant-tabs-nav-list {
+    width: 100% !important;
+  }
+
+  .ant-tabs-tab {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    flex-shrink: 0;
+    margin: 0;
+  }
+}

@@ -1,0 +1,16 @@
+.main-layout {
+    height: 100%;
+
+    &__sider {
+        background-color: transparent;
+        overflow: auto;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+    }
+
+    &__content {
+        padding: 24px;
+        margin-left: 300px;
+    }
+}

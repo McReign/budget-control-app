@@ -1,0 +1,12 @@
+.transaction-modal {
+  &__amount-input,
+  &__date-input,
+  &__buttons-wrapper {
+    width: 100%;
+  }
+
+  &__buttons-wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
