@@ -8,13 +8,18 @@ import {
     ADD_OPERATION_ERROR,
     ADD_OPERATION_SUCCESS,
     ADD_OPERATION_START,
+    INVITE_USER_SUCCESS,
+    INVITE_USER_ERROR,
+    INVITE_USER_START,
 } from './constants';
 
 const initialState = {
     wallets: null,
     operations: null,
     loading: false,
+    inviteLoading: false,
     error: null,
+    inviteError: null,
 };
 
 export const walletsReducer = (state = initialState, action) => {
@@ -32,6 +37,8 @@ export const walletsReducer = (state = initialState, action) => {
                     [action.payload]: null,
                 },
             };
+        case INVITE_USER_START:
+            return { ...state, inviteLoading: true, inviteError: null };
         case GET_WALLETS_SUCCESS:
             return { ...state, loading: false, wallets: action.payload };
         case GET_WALLET_OPERATIONS_SUCCESS:
@@ -61,10 +68,14 @@ export const walletsReducer = (state = initialState, action) => {
                     : wallet
                 )),
             };
+        case INVITE_USER_SUCCESS:
+            return { ...state, inviteLoading: false, inviteError: null };
         case GET_WALLETS_ERROR:
         case GET_WALLET_OPERATIONS_ERROR:
         case ADD_OPERATION_ERROR:
             return { ...state, loading: false, error: action.payload };
+        case INVITE_USER_ERROR:
+            return { ...state, inviteLoading: false, inviteError: action.payload };
         default:
             return state;
     }

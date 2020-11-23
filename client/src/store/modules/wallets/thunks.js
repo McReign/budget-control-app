@@ -8,8 +8,11 @@ import {
     addOperationError,
     addOperationStart,
     addOperationSuccess,
+    inviteUserError,
+    inviteUserStart,
+    inviteUserSuccess,
 } from './actions';
-import { getWalletsRequest, getWalletOperationsRequest } from '../../../api/wallets';
+import { getWalletsRequest, getWalletOperationsRequest, inviteUserRequest } from '../../../api/wallets';
 import { addOperationRequest } from '../../../api/operations';
 
 export const getWallets = () => {
@@ -61,6 +64,24 @@ export const addOperation = (walletId, operation) => {
             .catch(err => {
                 const errors = err?.response?.data?.errors;
                 dispatch(addOperationError(errors));
+                return Promise.reject(errors);
+            });
+    };
+};
+
+export const inviteUser = (walletId, toUserId) => {
+    return dispatch => {
+        dispatch(inviteUserStart(walletId, toUserId));
+
+        return inviteUserRequest(walletId, toUserId)
+            .then(res => {
+                const invitation = res?.data?.data?.invitation;
+                dispatch(inviteUserSuccess(walletId, invitation));
+                return Promise.resolve(invitation);
+            })
+            .catch(err => {
+                const errors = err?.response?.data?.errors;
+                dispatch(inviteUserError(errors));
                 return Promise.reject(errors);
             });
     };

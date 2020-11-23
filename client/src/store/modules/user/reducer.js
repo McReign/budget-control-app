@@ -8,10 +8,17 @@ import {
     LOGOUT_USER_START,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_ERROR,
+    GET_NOTIFICATIONS_ERROR,
+    GET_NOTIFICATIONS_SUCCESS,
+    GET_NOTIFICATIONS_START,
+    REGISTER_USER_SUCCESS,
+    REGISTER_USER_ERROR,
+    REGISTER_USER_START,
 } from './constants';
 
 const initialState = {
     user: null,
+    notifications: null,
     token: null,
     loading: false,
     error: null,
@@ -22,16 +29,23 @@ export const userReducer = (state = initialState, action) => {
         case LOGIN_USER_START:
         case GET_USER_START:
         case LOGOUT_USER_START:
+        case GET_NOTIFICATIONS_START:
+        case REGISTER_USER_START:
             return { ...state, loading: true, error: null };
         case LOGIN_USER_SUCCESS:
+        case REGISTER_USER_SUCCESS:
             return { ...state, loading: false, token: action.payload };
         case GET_USER_SUCCESS:
             return { ...state, loading: false, user: action.payload };
         case LOGOUT_USER_SUCCESS:
             return { ...state, loading: false, user: null, token: null };
+        case GET_NOTIFICATIONS_SUCCESS:
+            return { ...state, loading: false, notifications: action.payload };
         case LOGIN_USER_ERROR:
         case GET_USER_ERROR:
         case LOGOUT_USER_ERROR:
+        case GET_NOTIFICATIONS_ERROR:
+        case REGISTER_USER_ERROR:
             return { ...state, loading: false, error: action.payload };
         default:
             return state;

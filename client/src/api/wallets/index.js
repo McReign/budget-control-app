@@ -20,3 +20,13 @@ export const getWalletOperationsRequest = (walletId) => {
         },
     );
 };
+
+export const inviteUserRequest = (walletId, toUserId) => {
+    return apiService.post(
+        `/api/wallets/${walletId}/invite`,
+        { toUserId },
+        {
+            headers: withAuthorizationToken(),
+        },
+    );
+};

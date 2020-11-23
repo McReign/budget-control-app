@@ -8,10 +8,17 @@ import {
     logoutUserError,
     logoutUserStart,
     logoutUserSuccess,
+    getNotificationsError,
+    getNotificationsStart,
+    getNotificationsSuccess,
+    registerUserError,
+    registerUserStart,
+    registerUserSuccess,
 } from './actions';
-import { loginRequest, getMeRequest, logoutRequest } from '../../../api/users';
+import { loginRequest, getMeRequest, logoutRequest, registerRequest } from '../../../api/users';
 import { setAuthorizationToken } from '../../../utils/setAuthorizationToken';
 import { clearAuthorizationToken } from '../../../utils/clearAuthorizationToken';
+import { getNotificationsRequest } from '../../../api/notifications';
 
 export const loginUser = (email, password, remember) => {
     return dispatch => {
@@ -27,6 +34,25 @@ export const loginUser = (email, password, remember) => {
             .catch(err => {
                 const errors = err?.response?.data?.errors;
                 dispatch(loginUserError(errors));
+                return Promise.reject(errors);
+            });
+    };
+};
+
+export const registerUser = (email, displayName, password) => {
+    return dispatch => {
+        dispatch(registerUserStart({ email, displayName, password }));
+
+        return registerRequest(email, displayName, password)
+            .then(res => {
+                const token = res?.data?.data?.token;
+                setAuthorizationToken(token, true);
+                dispatch(registerUserSuccess(token));
+                return Promise.resolve(token);
+            })
+            .catch(err => {
+                const errors = err?.response?.data?.errors;
+                dispatch(registerUserError(errors));
                 return Promise.reject(errors);
             });
     };
@@ -63,6 +89,24 @@ export const getUser = () => {
             .catch(err => {
                 const errors = err?.response?.data?.errors;
                 dispatch(getUserError(errors));
+                return Promise.reject(errors);
+            });
+    };
+};
+
+export const getNotifications = () => {
+    return dispatch => {
+        dispatch(getNotificationsStart());
+
+        return getNotificationsRequest()
+            .then(res => {
+                const notifications = res?.data?.data?.notifications;
+                dispatch(getNotificationsSuccess(notifications));
+                return Promise.resolve(notifications);
+            })
+            .catch(err => {
+                const errors = err?.response?.data?.errors;
+                dispatch(getNotificationsError(errors));
                 return Promise.reject(errors);
             });
     };

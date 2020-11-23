@@ -24,3 +24,17 @@ export const logoutRequest = () => {
         },
     );
 };
+
+export const registerRequest = (email, displayName, password) => {
+    return apiService.post('/api/users/register', { email, displayName, password });
+};
+
+export const getUsersRequest = (search) => {
+    return apiService.get(
+        '/api/users',
+        { search },
+        {
+            headers: withAuthorizationToken(),
+        },
+    );
+};

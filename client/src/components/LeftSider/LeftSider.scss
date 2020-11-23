@@ -67,4 +67,19 @@
     background-color: #001529;
     box-shadow: -1px 0px 9px -1px rgba(0,0,0,0.75);
   }
+
+  &__question-avatar {
+    background-color: transparentize(#91d5ff, 0.9);
+    margin-bottom: 20px;
+  }
+
+  &__notifications-avatar {
+    background-color: transparentize(#91d5ff, 0.7);
+  }
+
+  &__notification {
+    .ant-card-body {
+      padding: 14px;
+    }
+  }
 }

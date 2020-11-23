@@ -8,6 +8,9 @@ import {
     ADD_OPERATION_ERROR,
     ADD_OPERATION_START,
     ADD_OPERATION_SUCCESS,
+    INVITE_USER_ERROR,
+    INVITE_USER_START,
+    INVITE_USER_SUCCESS,
 } from './constants';
 
 export const getWalletsStart = () => ({
@@ -51,5 +54,20 @@ export const addOperationSuccess = (walletId, operation) => ({
 
 export const addOperationError = (error) => ({
     type: ADD_OPERATION_ERROR,
+    payload: error,
+});
+
+export const inviteUserStart = (walletId, toUserId) => ({
+    type: INVITE_USER_START,
+    payload: { walletId, toUserId },
+});
+
+export const inviteUserSuccess = (walletId, invitation) => ({
+    type: INVITE_USER_SUCCESS,
+    payload: { walletId, invitation },
+});
+
+export const inviteUserError = (error) => ({
+    type: INVITE_USER_ERROR,
     payload: error,
 });

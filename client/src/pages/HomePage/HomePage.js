@@ -11,7 +11,7 @@ import {
 import { MainLayout } from '../layouts/MainLayout/MainLayout'
 import { LeftSider } from '../../components/LeftSider/LeftSider';
 import { RequestStatus, RequestWrapper } from '../../components/RequestWrapper/RequestWrapper';
-import { getUser, logoutUser } from '../../store/modules/user/thunks';
+import { getNotifications, getUser, logoutUser } from '../../store/modules/user/thunks';
 import { getWalletOperations, getWallets } from '../../store/modules/wallets/thunks';
 import { ComponentResolver } from '../../utils/ComponentResolver';
 import { userSelector } from '../../store/modules/user/selectors';
@@ -22,6 +22,7 @@ import { ERROR_MESSAGE_DURATION } from '../../constants/errors';
 import { WalletSummary } from '../../components/WalletSummary/WalletSummary';
 import { getCategories } from '../../store/modules/categories/thunks';
 import { WalletTransactions } from '../../components/WalletTransactions/WalletTransactions';
+import { WalletUsers } from '../../components/WalletUsers/WalletUsers';
 
 const DEFAULT_MENU_ITEM = 'summary';
 
@@ -69,13 +70,7 @@ componentResolver
             subTitle="Осталось совсем чуть-чуть. В следующих версиях будут добавлены отчеты."
         />
     ))
-    .register('users', () => (
-        <Result
-            status="404"
-            title="Страница не найдена"
-            subTitle="Осталось совсем чуть-чуть. В следующих версиях будут добавлены пользователи."
-        />
-    ));
+    .register('users', WalletUsers);
 
 export const HomePage = () => {
     const dispatch = useDispatch();
@@ -116,6 +111,7 @@ export const HomePage = () => {
                 menuItems={generateMenuItems(miniMenuItem)}
                 onMenuSelect={handleMenuItemSelect}
                 onMiniMenuSelect={handleMiniMenuItemSelect}
+                refreshUserData={fetchUserData}
             />
         );
     };
@@ -143,7 +139,7 @@ export const HomePage = () => {
 
     const fetchUserData = () => {
         setRequestStatus(RequestStatus.LOADING);
-        return Promise.all([fetchUser(), fetchWallets()])
+        return Promise.all([fetchUser(), fetchWallets(), fetchNotifications()])
             .then(() => setRequestStatus(RequestStatus.LOADED))
             .catch(() => setRequestStatus(RequestStatus.ERROR));
     };
@@ -164,6 +160,10 @@ export const HomePage = () => {
         return dispatch(getWallets());
     };
 
+    const fetchNotifications = () => {
+        return dispatch(getNotifications());
+    };
+
     const generateMiniMenuTopItems = (wallets) => {
         if (!wallets) return [];
         return wallets.map((wallet, index) => ({
@@ -180,6 +180,8 @@ export const HomePage = () => {
                 key: 'user',
                 id: user.id,
                 name: getFirstLetter(user.displayName),
+                fullName: user.displayName,
+                email: user.email,
             }
         ];
     };

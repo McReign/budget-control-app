@@ -9,3 +9,7 @@ export const isLoadingSelector = (state) => {
 export const userSelector = (state) => {
     return state.userState.user;
 };
+
+export const notificationsSelector = (state) => {
+    return state.userState.notifications || [];
+};

@@ -1,5 +1,26 @@
 .login-page {
+  $self: &;
+
   &__error-alert {
     margin-bottom: 10px;
+  }
+
+  &__tabs {
+    .ant-tabs-nav-list {
+      display: flex;
+      align-items: baseline;
+    }
+  }
+
+  .ant-tabs-tab {
+    #{$self}__tab-title {
+      transition: opacity 0.3s, font-size 0.3s;
+    }
+  }
+
+  .ant-tabs-tab:not(.ant-tabs-tab-active) {
+    #{$self}__tab-title {
+      opacity: 0.3;
+    }
   }
 }

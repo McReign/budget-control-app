@@ -108,7 +108,7 @@ export const WalletTransactions = ({ walletId }) => {
                                                         <UserOutlined />
                                                         <span>
                                                             {transaction.user.displayName}&nbsp;
-                                                            {currentUser.id === transaction.user.id && '(Вы)'}
+                                                            {currentUser?.id === transaction.user.id && '(Вы)'}
                                                         </span>
                                                     </Space>
                                                 </Typography.Text>

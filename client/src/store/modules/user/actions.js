@@ -8,6 +8,12 @@ import {
     GET_USER_ERROR,
     GET_USER_START,
     GET_USER_SUCCESS,
+    GET_NOTIFICATIONS_ERROR,
+    GET_NOTIFICATIONS_START,
+    GET_NOTIFICATIONS_SUCCESS,
+    REGISTER_USER_ERROR,
+    REGISTER_USER_START,
+    REGISTER_USER_SUCCESS,
 } from './constants';
 
 export const loginUserStart = (data) => ({
@@ -38,6 +44,21 @@ export const logoutUserError = (error) => ({
     payload: error,
 });
 
+export const registerUserStart = (data) => ({
+    type: REGISTER_USER_START,
+    payload: data,
+});
+
+export const registerUserSuccess = (token) => ({
+    type: REGISTER_USER_SUCCESS,
+    payload: token,
+});
+
+export const registerUserError = (error) => ({
+    type: REGISTER_USER_ERROR,
+    payload: error,
+});
+
 export const getUserStart = () => ({
     type: GET_USER_START,
 });
@@ -49,5 +70,19 @@ export const getUserSuccess = (user) => ({
 
 export const getUserError = (error) => ({
     type: GET_USER_ERROR,
+    payload: error,
+});
+
+export const getNotificationsStart = () => ({
+    type: GET_NOTIFICATIONS_START,
+});
+
+export const getNotificationsSuccess = (notifications) => ({
+    type: GET_NOTIFICATIONS_SUCCESS,
+    payload: notifications,
+});
+
+export const getNotificationsError = (error) => ({
+    type: GET_NOTIFICATIONS_ERROR,
     payload: error,
 });

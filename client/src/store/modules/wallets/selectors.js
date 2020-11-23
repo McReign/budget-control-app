@@ -6,12 +6,24 @@ export const isLoadingSelector = (state) => {
     return state.walletsState.loading;
 };
 
+export const inviteErrorsSelector = (state) => {
+    return state.walletsState.inviteError;
+};
+
+export const isInviteLoadingSelector = (state) => {
+    return state.walletsState.inviteLoading;
+};
+
 export const walletsSelector = (state) => {
     return state.walletsState.wallets;
 };
 
 export const walletSelector = (state) => (walletId) => {
     return (state.walletsState.wallets || []).find(wallet => wallet.id === walletId);
+};
+
+export const walletUsersSelector = (state) => (walletId) => {
+    return walletSelector(state)(walletId).users || [];
 };
 
 export const walletBalanceSelector = (state) => (walletId) => {
