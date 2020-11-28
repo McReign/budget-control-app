@@ -9,10 +9,12 @@ import { mapStoreRequestStateToRequestStatus } from '../../../../utils/mapStoreR
 import {
     errorsSelector,
     isLoadingSelector,
-    walletExpensesSelector,
-    walletIncomesSelector,
     walletOperationsSelector,
 } from '../../../../store/modules/wallets/selectors';
+import {
+    walletExpensesEnhancer,
+    walletIncomesEnhancer,
+} from '../../../../store/modules/wallets/selectorEnhancers';
 import { withRubleSign } from '../../../../utils/withRubleSign';
 import { AddButton } from '../../../AddButton/AddButton';
 import { TransactionModalEdit } from '../../../TransactionModal/TransactionModalEdit';
@@ -29,12 +31,14 @@ export const WalletTransactions = () => {
     const [operationModalVisible, setOperationModalVisible] = useState(false);
     const [addModalVisible, setAddModalVisible] = useState(false);
     const [openedOperation, setOpenedOperation] = useState(null);
+
     const currentUser = useSelector(userSelector);
     const isOperationsLoading = useSelector(isLoadingSelector);
     const operationsError = useSelector(errorsSelector);
+
     const operations = useSelector(walletOperationsSelector)(walletId);
-    const expenses = useSelector(walletExpensesSelector)(walletId);
-    const incomes = useSelector(walletIncomesSelector)(walletId);
+    const expenses = walletExpensesEnhancer(operations);
+    const incomes = walletIncomesEnhancer(operations);
 
     const openAddModal = () => {
         setAddModalVisible(true);

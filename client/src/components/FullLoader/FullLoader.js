@@ -2,10 +2,10 @@ import './FullLoader.scss';
 import React from 'react';
 import { Spin } from 'antd';
 
-export const FullLoader = () => {
+export const FullLoader = ({ delay }) => {
     return (
         <div className='full-loader'>
-            <Spin size='large' />
+            <Spin size='large' delay={delay} />
         </div>
     );
 };

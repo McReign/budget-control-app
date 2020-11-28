@@ -16,7 +16,8 @@ import {
     Spin
 } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { isInviteLoadingSelector, walletUsersSelector } from '../../../../store/modules/wallets/selectors';
+import { isInviteLoadingSelector, walletsSelector } from '../../../../store/modules/wallets/selectors';
+import { walletEnhancer, walletUsersEnhancer } from '../../../../store/modules/wallets/selectorEnhancers';
 import { ERROR_MESSAGE_DURATION, SUCCESS_MESSAGE_DURATION } from '../../../../constants/errors';
 import { userSelector } from '../../../../store/modules/user/selectors';
 import { getUsersRequest } from '../../../../api/users';
@@ -30,9 +31,11 @@ export const WalletUsers = () => {
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [isUsersSearching, setIsUsersSearching] = useState(false);
     const dispatch = useDispatch();
+
     const currentUser = useSelector(userSelector);
     const isInviteLoading = useSelector(isInviteLoadingSelector);
-    const walletUsers = useSelector(walletUsersSelector)(walletId);
+    const wallet = walletEnhancer(useSelector(walletsSelector))(walletId);
+    const walletUsers = walletUsersEnhancer(wallet);
 
     const handleUserInvite = () => {
         if (!selectedUserId) return;

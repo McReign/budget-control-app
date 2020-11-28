@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Space } from 'antd';
 import { EMPTY_FIELD_ERROR } from '../../constants/errors';
 import { withRubleSign } from '../../utils/withRubleSign';
-import { incomeCategoriesSelector, expenseCategoriesSelector } from '../../store/modules/categories/selectors';
+import { categoriesSelector } from '../../store/modules/categories/selectors';
+import { incomeCategoriesEnhancer, expenseCategoriesEnhancer } from '../../store/modules/categories/selectorEnhancers';
 import moment from 'moment';
 
 const generateButtons = (isNew, loading, onSave, onAdd, onCancel) => {
@@ -43,8 +44,8 @@ const generateButtons = (isNew, loading, onSave, onAdd, onCancel) => {
 
 export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onCancel, onSave, onAdd }) => {
     const [ownTransaction, setOwnTransaction] = useState(transaction || {});
-    const incomeCategories = useSelector(incomeCategoriesSelector);
-    const expenseCategories = useSelector(expenseCategoriesSelector);
+    const incomeCategories = incomeCategoriesEnhancer(useSelector(categoriesSelector));
+    const expenseCategories = expenseCategoriesEnhancer(useSelector(categoriesSelector));
 
     const [form] = Form.useForm();
 

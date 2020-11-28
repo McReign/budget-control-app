@@ -49,7 +49,7 @@ export const HomePage = () => {
         <RequestWrapper requestStatus={requestStatus}>
             <MainLayout sider={<LeftSiderWithStore />}>
                 <Switch>
-                    <Route path='/wallet/:walletId'>
+                    <Route path='/wallets/:walletId/:key?'>
                         <WalletContent />
                     </Route>
                     <Route path='/user'>

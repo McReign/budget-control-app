@@ -9,15 +9,18 @@ import { mapStoreRequestStateToRequestStatus } from '../../../../utils/mapStoreR
 import {
     errorsSelector,
     isLoadingSelector,
-    walletSelector,
-    walletBalanceSelector,
-    walletUsedExpenseCategoriesSelector,
-    walletUsedIncomeCategoriesSelector,
-    walletUsedExpenseCategoriesSumsSelector,
-    walletUsedIncomeCategoriesSumsSelector,
-    walletExpensesSumSelector,
-    walletIncomesSumSelector,
+    walletsSelector,
+    walletOperationsSelector,
 } from '../../../../store/modules/wallets/selectors';
+import {
+    walletEnhancer,
+    walletBalanceEnhancer,
+    walletExpensesEnhancer,
+    walletIncomesEnhancer,
+    walletOperationsSumEnhancer,
+    walletUsedCategoriesEnhancer,
+    walletUsedCategoriesSumsEnhancer,
+} from '../../../../store/modules/wallets/selectorEnhancers';
 import { withRubleSign } from '../../../../utils/withRubleSign';
 import { AddButton } from '../../../AddButton/AddButton';
 import { TransactionModalEdit } from '../../../TransactionModal/TransactionModalEdit';
@@ -29,16 +32,19 @@ export const WalletSummary = () => {
     const { walletId } = useParams();
     const dispatch = useDispatch();
     const [addModalVisible, setAddModalVisible] = useState(false);
-    const isOperationsLoading = useSelector(isLoadingSelector);
-    const operationsError = useSelector(errorsSelector);
-    const wallet = useSelector(walletSelector)(walletId);
-    const balance = useSelector(walletBalanceSelector)(walletId);
-    const expensesSum = useSelector(walletExpensesSumSelector)(walletId);
-    const incomesSum = useSelector(walletIncomesSumSelector)(walletId);
-    const usedExpenseCategories = useSelector(walletUsedExpenseCategoriesSelector)(walletId);
-    const usedExpenseCategoriesSums = useSelector(walletUsedExpenseCategoriesSumsSelector)(walletId);
-    const usedIncomeCategories = useSelector(walletUsedIncomeCategoriesSelector)(walletId);
-    const usedIncomeCategoriesSums = useSelector(walletUsedIncomeCategoriesSumsSelector)(walletId);
+
+    const wallet = walletEnhancer(useSelector(walletsSelector))(walletId);
+    const operations = useSelector(walletOperationsSelector)(walletId);
+
+    const balance = walletBalanceEnhancer(wallet);
+    const expenses = walletExpensesEnhancer(operations);
+    const incomes = walletIncomesEnhancer(operations);
+    const expensesSum = walletOperationsSumEnhancer(expenses);
+    const incomesSum = walletOperationsSumEnhancer(incomes);
+    const usedExpenseCategories = walletUsedCategoriesEnhancer(expenses);
+    const usedExpenseCategoriesSums = walletUsedCategoriesSumsEnhancer(expenses);
+    const usedIncomeCategories = walletUsedCategoriesEnhancer(incomes);
+    const usedIncomeCategoriesSums = walletUsedCategoriesSumsEnhancer(incomes);
 
     const openAddModal = () => {
         setAddModalVisible(true);

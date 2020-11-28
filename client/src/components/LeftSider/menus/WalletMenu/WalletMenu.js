@@ -1,6 +1,6 @@
 import { Menu } from 'antd';
 import React from 'react';
-import { Link, useRouteMatch, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
     AlignLeftOutlined,
     DollarCircleOutlined,
@@ -43,16 +43,16 @@ const menuItems = [
 ];
 
 export const WalletMenu = () => {
-    const match = useRouteMatch();
+    const { walletId, key } = useParams();
     return (
         <Menu
             theme="dark"
-            selectedKeys={[]}
+            selectedKeys={[key]}
             mode="inline"
         >
             {menuItems.map(({ key, icon: Icon, name, path }) => (
                 <Menu.Item key={key} icon={<Icon />}>
-                    <Link to={`${match.url}${path}`}>
+                    <Link to={`/wallets/${walletId}${path}`}>
                         {name}
                     </Link>
                 </Menu.Item>

@@ -28,7 +28,7 @@ export const LeftSider = ({ wallets, user, notifications }) => {
                 <div className='left-sider__wallets'>
                     <Space direction='vertical'>
                         {wallets.map(({ id }, index) => (
-                            <NavLink key={id} to={`/wallet/${id}`}>
+                            <NavLink key={id} to={`/wallets/${id}`}>
                                 <Avatar
                                     className={cn('left-sider__wallet-avatar', 'left-sider__main-menu-item')}
                                     gap={4}
@@ -75,7 +75,7 @@ export const LeftSider = ({ wallets, user, notifications }) => {
             </div>
             <div className='left-sider__menu-wrapper'>
                 <Switch>
-                    <Route path='/wallet/:walletId'>
+                    <Route path='/wallets/:walletId/:key?'>
                         <WalletMenu />
                     </Route>
                     <Route path='/user'>

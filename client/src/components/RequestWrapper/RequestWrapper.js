@@ -10,7 +10,7 @@ export const RequestStatus = {
 
 export const RequestWrapper = ({ requestStatus, children }) => {
     if (requestStatus === RequestStatus.LOADING) {
-        return <FullLoader />;
+        return <FullLoader delay={200} />;
     }
 
     if (requestStatus === RequestStatus.ERROR) {
