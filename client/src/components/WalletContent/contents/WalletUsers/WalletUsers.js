@@ -1,6 +1,7 @@
 import './WalletUsers.scss';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
     Card,
     Col,
@@ -15,15 +16,16 @@ import {
     Spin
 } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { isInviteLoadingSelector, walletUsersSelector } from '../../store/modules/wallets/selectors';
-import { ERROR_MESSAGE_DURATION, SUCCESS_MESSAGE_DURATION } from '../../constants/errors';
-import { userSelector } from '../../store/modules/user/selectors';
-import { getUsersRequest } from '../../api/users';
-import { inviteUser } from '../../store/modules/wallets/thunks';
+import { isInviteLoadingSelector, walletUsersSelector } from '../../../../store/modules/wallets/selectors';
+import { ERROR_MESSAGE_DURATION, SUCCESS_MESSAGE_DURATION } from '../../../../constants/errors';
+import { userSelector } from '../../../../store/modules/user/selectors';
+import { getUsersRequest } from '../../../../api/users';
+import { inviteUser } from '../../../../store/modules/wallets/thunks';
 
 const INVITATION_SUCCESS_MESSAGE = 'Приглашение отправлено!';
 
-export const WalletUsers = ({ walletId }) => {
+export const WalletUsers = () => {
+    const { walletId } = useParams();
     const [foundUsers, setFoundUsers] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [isUsersSearching, setIsUsersSearching] = useState(false);

@@ -1,5 +1,5 @@
 import { getAuthorizationToken } from './getAuthorizationToken';
-import { AUTHORIZATION_TOKEN_NAME } from '../constants/authorization';
+import { AUTHORIZATION_TOKEN_NAME } from '../../constants/authorization';
 
 export const withAuthorizationToken = (obj) => {
     const token = getAuthorizationToken();

@@ -1,10 +1,11 @@
 import './WalletSummary.scss';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Alert, Card, Col, Row, Tabs, Statistic, Typography, Empty, Space, message } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { RequestWrapper } from '../RequestWrapper/RequestWrapper';
-import { mapStoreRequestStateToRequestStatus } from '../../utils/mapStoreRequestStateToRequestStatus';
+import { RequestWrapper } from '../../../RequestWrapper/RequestWrapper';
+import { mapStoreRequestStateToRequestStatus } from '../../../../utils/mapStoreRequestStateToRequestStatus';
 import {
     errorsSelector,
     isLoadingSelector,
@@ -16,15 +17,16 @@ import {
     walletUsedIncomeCategoriesSumsSelector,
     walletExpensesSumSelector,
     walletIncomesSumSelector,
-} from '../../store/modules/wallets/selectors';
-import { withRubleSign } from '../../utils/withRubleSign';
-import { AddButton } from '../AddButton/AddButton';
-import { TransactionModalEdit } from '../TransactionModal/TransactionModalEdit';
-import { addOperation } from '../../store/modules/wallets/thunks';
-import { ERROR_MESSAGE_DURATION } from '../../constants/errors';
-import { withNumberGroupSeparator } from '../../utils/withNumberGroupSeparator';
+} from '../../../../store/modules/wallets/selectors';
+import { withRubleSign } from '../../../../utils/withRubleSign';
+import { AddButton } from '../../../AddButton/AddButton';
+import { TransactionModalEdit } from '../../../TransactionModal/TransactionModalEdit';
+import { addOperation } from '../../../../store/modules/wallets/thunks';
+import { ERROR_MESSAGE_DURATION } from '../../../../constants/errors';
+import { withNumberGroupSeparator } from '../../../../utils/withNumberGroupSeparator';
 
-export const WalletSummary = ({ walletId }) => {
+export const WalletSummary = () => {
+    const { walletId } = useParams();
     const dispatch = useDispatch();
     const [addModalVisible, setAddModalVisible] = useState(false);
     const isOperationsLoading = useSelector(isLoadingSelector);
@@ -171,11 +173,5 @@ export const WalletSummary = ({ walletId }) => {
         );
     };
 
-    return (
-        <RequestWrapper
-            requestStatus={mapStoreRequestStateToRequestStatus(wallet, isOperationsLoading, operationsError)}
-        >
-            {renderForm()}
-        </RequestWrapper>
-    );
+    return renderForm();
 };

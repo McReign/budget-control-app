@@ -1,28 +1,30 @@
 import './WalletTransactions.scss';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Card, Col, Row, Tabs, Typography, Empty, Space, message } from 'antd';
 import { ArrowRightOutlined, UserOutlined } from '@ant-design/icons';
-import { RequestWrapper } from '../RequestWrapper/RequestWrapper';
-import { mapStoreRequestStateToRequestStatus } from '../../utils/mapStoreRequestStateToRequestStatus';
+import { RequestWrapper } from '../../../RequestWrapper/RequestWrapper';
+import { mapStoreRequestStateToRequestStatus } from '../../../../utils/mapStoreRequestStateToRequestStatus';
 import {
     errorsSelector,
     isLoadingSelector,
     walletExpensesSelector,
     walletIncomesSelector,
     walletOperationsSelector,
-} from '../../store/modules/wallets/selectors';
-import { withRubleSign } from '../../utils/withRubleSign';
-import { AddButton } from '../AddButton/AddButton';
-import { TransactionModalEdit } from '../TransactionModal/TransactionModalEdit';
-import { addOperation } from '../../store/modules/wallets/thunks';
-import { ERROR_MESSAGE_DURATION } from '../../constants/errors';
-import { withNumberGroupSeparator } from '../../utils/withNumberGroupSeparator';
-import { toDisplayDate } from '../../utils/toDisplayDate';
-import { userSelector } from '../../store/modules/user/selectors';
-import { TransactionModalView } from '../TransactionModal/TransactionModalView';
+} from '../../../../store/modules/wallets/selectors';
+import { withRubleSign } from '../../../../utils/withRubleSign';
+import { AddButton } from '../../../AddButton/AddButton';
+import { TransactionModalEdit } from '../../../TransactionModal/TransactionModalEdit';
+import { addOperation } from '../../../../store/modules/wallets/thunks';
+import { ERROR_MESSAGE_DURATION } from '../../../../constants/errors';
+import { withNumberGroupSeparator } from '../../../../utils/withNumberGroupSeparator';
+import { toDisplayDate } from '../../../../utils/toDisplayDate';
+import { userSelector } from '../../../../store/modules/user/selectors';
+import { TransactionModalView } from '../../../TransactionModal/TransactionModalView';
 
-export const WalletTransactions = ({ walletId }) => {
+export const WalletTransactions = () => {
+    const { walletId } = useParams();
     const dispatch = useDispatch();
     const [operationModalVisible, setOperationModalVisible] = useState(false);
     const [addModalVisible, setAddModalVisible] = useState(false);

@@ -1,5 +1,5 @@
 import { apiService } from '../../services/ApiService';
-import { withAuthorizationToken } from '../../utils/withAuthorizationToken';
+import { withAuthorizationToken } from '../../utils/authorization/withAuthorizationToken';
 
 export const acceptInvitationRequest = (invitationId) => {
     return apiService.post(

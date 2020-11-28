@@ -16,8 +16,8 @@ import {
     registerUserSuccess,
 } from './actions';
 import { loginRequest, getMeRequest, logoutRequest, registerRequest } from '../../../api/users';
-import { setAuthorizationToken } from '../../../utils/setAuthorizationToken';
-import { clearAuthorizationToken } from '../../../utils/clearAuthorizationToken';
+import { setAuthorizationToken } from '../../../utils/authorization/setAuthorizationToken';
+import { clearAuthorizationToken } from '../../../utils/authorization/clearAuthorizationToken';
 import { getNotificationsRequest } from '../../../api/notifications';
 
 export const loginUser = (email, password, remember) => {
