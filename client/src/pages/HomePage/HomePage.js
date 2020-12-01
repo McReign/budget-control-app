@@ -8,6 +8,7 @@ import { getWalletOperations, getWallets } from '../../store/modules/wallets/thu
 import { getCategories } from '../../store/modules/categories/thunks';
 import { LeftSiderWithStore } from '../../components/LeftSider/LeftSiderWithStore';
 import { WalletContent } from '../../components/WalletContent/WalletContent';
+import { UserContent } from '../../components/UserContent/UserContent';
 
 export const HomePage = () => {
     const dispatch = useDispatch();
@@ -49,11 +50,11 @@ export const HomePage = () => {
         <RequestWrapper requestStatus={requestStatus}>
             <MainLayout sider={<LeftSiderWithStore />}>
                 <Switch>
-                    <Route path='/wallets/:walletId/:key?'>
+                    <Route path='/wallets/:walletId/:tab?'>
                         <WalletContent />
                     </Route>
-                    <Route path='/user'>
-                        User
+                    <Route path='/user/:tab?'>
+                        <UserContent />
                     </Route>
                 </Switch>
             </MainLayout>

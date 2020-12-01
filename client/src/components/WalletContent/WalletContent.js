@@ -15,7 +15,7 @@ import { errorsSelector, isLoadingSelector, walletsSelector } from '../../store/
 import { walletEnhancer } from '../../store/modules/wallets/selectorEnhancers';
 
 export const WalletContent = () => {
-    const { walletId, key } = useParams();
+    const { walletId, tab } = useParams();
     const dispatch = useDispatch();
 
     const isOperationsLoading = useSelector(isLoadingSelector);
@@ -26,7 +26,7 @@ export const WalletContent = () => {
         dispatch(getWalletOperations(walletId));
     }, [walletId]);
 
-    if (!key) {
+    if (!tab) {
         return <Redirect to={`/wallets/${walletId}/${WalletMenuKey.SUMMARY}`} />;
     }
 

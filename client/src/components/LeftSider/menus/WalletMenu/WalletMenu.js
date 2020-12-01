@@ -43,11 +43,11 @@ const menuItems = [
 ];
 
 export const WalletMenu = () => {
-    const { walletId, key } = useParams();
+    const { walletId, tab } = useParams();
     return (
         <Menu
             theme="dark"
-            selectedKeys={[key]}
+            selectedKeys={[tab]}
             mode="inline"
         >
             {menuItems.map(({ key, icon: Icon, name, path }) => (

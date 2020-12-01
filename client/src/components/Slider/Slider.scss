@@ -1,0 +1,21 @@
+.slider {
+  .slick-arrow {
+    color: unset !important;
+    background-color: unset !important;
+    font-size: unset !important;
+    width: unset !important;
+    height: unset !important;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0;
+    z-index: 10;
+  }
+
+  .slick-prev {
+    left: 0;
+  }
+
+  .slick-next {
+    right: 0;
+  }
+}

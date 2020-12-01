@@ -8,8 +8,30 @@
   .ant-tabs-tab {
     display: flex;
     justify-content: center;
-    flex-grow: 1;
-    flex-shrink: 0;
+    flex: 0 1 100%;
     margin: 0;
+  }
+
+  &__divider {
+    margin: 0;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: baseline;
+  }
+
+  &__dated-operations-wrapper {
+    & + & {
+      margin-top: 16px;
+    }
+  }
+
+  &__dated-operations {
+    margin-top: 6px;
+  }
+
+  &__dated-operations-date {
+    padding: 0 12px;
   }
 }

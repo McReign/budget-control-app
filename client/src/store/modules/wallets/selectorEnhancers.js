@@ -1,3 +1,6 @@
+import { uniqBy } from 'lodash';
+import { toDisplayDate } from '../../../utils/toDisplayDate';
+
 export const walletEnhancer = (wallets) => (walletId) => {
     return wallets.find(wallet => wallet.id === walletId);
 };
@@ -8,6 +11,10 @@ export const walletUsersEnhancer = (wallet) => {
 
 export const walletBalanceEnhancer = (wallet) => {
     return wallet?.balance;
+};
+
+export const walletOperationsByUserEnhancer = (operations) => (userId) => {
+    return operations.filter(operation => operation?.user?.id === userId);
 };
 
 export const walletIncomesEnhancer = (operations) => {
@@ -21,12 +28,12 @@ export const walletExpensesEnhancer = (operations) => {
 export const walletCategorizedOperationsEnhancer = (operations) => {
     return operations.reduce((acc, operation) => ({
         ...acc,
-        [operation.category.displayName]: [...(acc[operation.category.displayName] || []), operation],
+        [operation.category.slug]: [...(acc[operation.category.slug] || []), operation],
     }), {});
 };
 
 export const walletUsedCategoriesEnhancer = (operations) => {
-    return Object.keys(walletCategorizedOperationsEnhancer(operations));
+    return uniqBy(operations.map(operation => operation.category), category => category.slug);
 };
 
 export const walletOperationsSumEnhancer = (operations) => {
@@ -35,8 +42,25 @@ export const walletOperationsSumEnhancer = (operations) => {
 
 export const walletUsedCategoriesSumsEnhancer = (operations) => {
     const categorizedOperations = walletCategorizedOperationsEnhancer(operations);
-    return walletUsedCategoriesEnhancer(operations).reduce((acc, category) => ({
+    return Object.keys(categorizedOperations).reduce((acc, categorySlug) => ({
         ...acc,
-        [category]: walletOperationsSumEnhancer(categorizedOperations[category]),
+        [categorySlug]: walletOperationsSumEnhancer(categorizedOperations[categorySlug]),
     }), {});
 };
+
+export const walletOperationsByPeriodEnhancer = (operations) => ([start, end]) => {
+    return operations.filter(operation => {
+        return new Date(operation.date) >= new Date(start) && new Date(operation.date) <= new Date(end);
+    });
+};
+
+export const walletDatedOperations = (operations) => {
+    return operations.reduce((acc, operation) => {
+        const date = toDisplayDate(operation.date);
+        return {
+            ...acc,
+            [date]: [...(acc[date] || []), operation],
+        };
+    }, {});
+};
+

@@ -75,10 +75,10 @@ export const LeftSider = ({ wallets, user, notifications }) => {
             </div>
             <div className='left-sider__menu-wrapper'>
                 <Switch>
-                    <Route path='/wallets/:walletId/:key?'>
+                    <Route path='/wallets/:walletId/:tab?'>
                         <WalletMenu />
                     </Route>
-                    <Route path='/user'>
+                    <Route path='/user/:tab?'>
                         <UserMenu />
                     </Route>
                 </Switch>

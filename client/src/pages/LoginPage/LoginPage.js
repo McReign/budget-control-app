@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Checkbox, Row, Col, Typography, Card, message, Tabs } from 'antd';
 import { LoginLayout } from '../layouts/LoginLayout/LoginLayout';
 import { EMPTY_FIELD_ERROR, ERROR_MESSAGE_DURATION } from '../../constants/errors';
-import { loginUser, registerUser } from '../../store/modules/user/thunks';
+import { getUser, loginUser, registerUser } from '../../store/modules/user/thunks';
 import { isLoadingSelector } from '../../store/modules/user/selectors';
 
 export const LoginPage = () => {
@@ -21,7 +21,8 @@ export const LoginPage = () => {
 
     const onLoginFinish = ({ email, password, remember }) => {
         dispatch(loginUser(email, password, remember))
-            .then(() => history.push('/'))
+            .then(() => dispatch(getUser()))
+            .then((user) => history.push(`/wallets/${user?.activeWallet}`))
             .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION));
     };
 
