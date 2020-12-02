@@ -1,6 +1,6 @@
 import './TransactionModal.scss';
 import React from 'react';
-import { Button, Descriptions, Modal, Space, Typography } from 'antd';
+import { Button, Descriptions, Modal, Space, Tag, Typography } from 'antd';
 import { withRubleSign } from '../../utils/withRubleSign';
 import { withNumberGroupSeparator } from '../../utils/withNumberGroupSeparator';
 import { toDisplayDate } from '../../utils/toDisplayDate';
@@ -25,13 +25,13 @@ export const TransactionModalView = ({ transaction, visible, onCancel }) => {
     return (
         <Modal
             className='transaction-modal'
-            width={380}
+            width={420}
             visible={visible}
             title={'Транзакция'}
             onCancel={onCancel}
             footer={null}
         >
-            <Descriptions layout='horizontal' column={24}>
+            <Descriptions layout='horizontal' column={24} bordered size='small'>
                 <Descriptions.Item label="Сумма" span={24}>
                     <Typography.Text strong>
                         {withRubleSign(withNumberGroupSeparator(transaction?.amount, ' '))}
@@ -61,6 +61,11 @@ export const TransactionModalView = ({ transaction, visible, onCancel }) => {
                 <Descriptions.Item label="Дата операции" span={24}>
                     {toDisplayDate(transaction?.date)}
                 </Descriptions.Item>
+                {transaction?.tags?.length && (
+                    <Descriptions.Item label="Тэги" span={24}>
+                        {transaction?.tags.map((tag, index) => <Tag key={index}>{tag}</Tag>)}
+                    </Descriptions.Item>
+                )}
                 {transaction?.note && (
                     <Descriptions.Item label="Заметка" span={24}>
                         {transaction?.note}

@@ -1,14 +1,15 @@
 import { Menu } from 'antd';
 import React, { useCallback } from 'react';
-import { LogoutOutlined, ProfileOutlined } from '@ant-design/icons';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { message } from 'antd';
+import { LogoutOutlined, ProfileOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { logoutUser } from '../../../../store/modules/user/thunks';
-import { ERROR_MESSAGE_DURATION } from '../../../../constants/errors';
+import { handleErrors } from '../../../../utils/handleErrors';
 
 export const UserMenuKey = {
     PROFILE: 'profile',
+    CATEGORIES: 'categories',
     LOGOUT: 'logout',
 };
 
@@ -18,6 +19,12 @@ const menuItems = [
         icon: ProfileOutlined,
         name: 'Профиль',
         path: `/${UserMenuKey.PROFILE}`
+    },
+    {
+        key: UserMenuKey.CATEGORIES,
+        icon: UnorderedListOutlined,
+        name: 'Категории',
+        path: `/${UserMenuKey.CATEGORIES}`
     },
 ];
 
@@ -29,7 +36,7 @@ export const UserMenu = () => {
     const handleLogout = useCallback(() => {
         dispatch(logoutUser())
             .then(() => history.push('/login'))
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION));
+            .catch(handleErrors(message));
     }, [dispatch]);
 
     return (

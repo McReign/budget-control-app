@@ -1,19 +1,19 @@
-export const errorsSelector = (state) => {
-    return state.categoriesState.error;
+export const categoriesErrorsSelector = (state) => {
+    return state.categoriesState.categories.error;
 };
 
-export const isLoadingSelector = (state) => {
-    return state.categoriesState.loading;
+export const categoriesLoadingSelector = (state) => {
+    return state.categoriesState.categories.loading;
+};
+
+export const addCategoryErrorsSelector = (state) => {
+    return state.categoriesState.addCategory.error;
+};
+
+export const addCategoryLoadingSelector = (state) => {
+    return state.categoriesState.addCategory.loading;
 };
 
 export const categoriesSelector = (state) => {
-    return state.categoriesState.categories || [];
-};
-
-export const incomeCategoriesSelector = (state) => {
-    return categoriesSelector(state).filter(category => category.type === 'INCOME');
-};
-
-export const expenseCategoriesSelector = (state) => {
-    return categoriesSelector(state).filter(category => category.type === 'EXPENSE');
+    return state.categoriesState.categories.list || [];
 };

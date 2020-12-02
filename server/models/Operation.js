@@ -30,6 +30,9 @@ const operationSchema = new mongoose.Schema({
   },
   note: {
     type: String,
+  },
+  tags: {
+    type: [String],
   }
 });
 

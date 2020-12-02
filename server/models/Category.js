@@ -9,12 +9,18 @@ const categorySchema = new mongoose.Schema({
   },
   slug: {
     type: String,
+    unique: 'Такая категория уже существует!',
     required: true,
   },
   type: {
     type: String,
     enum: Object.values(OperationType),
     required: true,
+  },
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    default: null,
   },
 });
 

@@ -18,10 +18,11 @@ import {
 import { UserOutlined } from '@ant-design/icons';
 import { isInviteLoadingSelector, walletsSelector } from '../../../../store/modules/wallets/selectors';
 import { walletEnhancer, walletUsersEnhancer } from '../../../../store/modules/wallets/selectorEnhancers';
-import { ERROR_MESSAGE_DURATION, SUCCESS_MESSAGE_DURATION } from '../../../../constants/errors';
+import { SUCCESS_MESSAGE_DURATION } from '../../../../constants/errors';
 import { userSelector } from '../../../../store/modules/user/selectors';
 import { getUsersRequest } from '../../../../api/users';
 import { inviteUser } from '../../../../store/modules/wallets/thunks';
+import { handleErrors } from '../../../../utils/handleErrors';
 
 const INVITATION_SUCCESS_MESSAGE = 'Приглашение отправлено!';
 
@@ -44,14 +45,14 @@ export const WalletUsers = () => {
                 message.success(INVITATION_SUCCESS_MESSAGE, SUCCESS_MESSAGE_DURATION);
                 setSelectedUserId(null);
             })
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION));
+            .catch(handleErrors(message));
     };
 
     const handleUserSearch = (search) => {
         setIsUsersSearching(true);
         getUsersRequest(search)
             .then(resp => setFoundUsers(resp.data.data?.users))
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION))
+            .catch(handleErrors(message))
             .finally(() => setIsUsersSearching(false));
     };
 

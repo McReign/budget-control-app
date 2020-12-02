@@ -27,11 +27,11 @@ import { withRubleSign } from '../../../../utils/withRubleSign';
 import { AddButton } from '../../../AddButton/AddButton';
 import { TransactionModalEdit } from '../../../TransactionModal/TransactionModalEdit';
 import { addOperation } from '../../../../store/modules/wallets/thunks';
-import { ERROR_MESSAGE_DURATION } from '../../../../constants/errors';
 import { withNumberGroupSeparator } from '../../../../utils/withNumberGroupSeparator';
 import { UsersSlider } from '../../../UsersSlider/UsersSlider';
 import { PeriodSlider } from '../../../PeriodSlider/PeriodSlider';
 import { WalletMenuKey } from '../../../LeftSider/menus/WalletMenu/WalletMenu';
+import { handleErrors } from '../../../../utils/handleErrors';
 
 export const WalletSummary = () => {
     const { walletId } = useParams();
@@ -68,7 +68,7 @@ export const WalletSummary = () => {
         closeAddModal();
         dispatch(addOperation(walletId, operation))
             // .then(closeAddModal)
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION));
+            .catch(handleErrors(message));
     };
 
     const renderBalanceBlock = () => {

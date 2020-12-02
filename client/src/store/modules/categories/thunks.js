@@ -2,8 +2,11 @@ import {
     getCategoriesError,
     getCategoriesStart,
     getCategoriesSuccess,
+    addCategoryError,
+    addCategoryStart,
+    addCategorySuccess,
 } from './actions';
-import { getCategoriesRequest } from '../../../api/categories';
+import { getCategoriesRequest, addCategoryRequest } from '../../../api/categories';
 
 export const getCategories = () => {
     return dispatch => {
@@ -18,6 +21,24 @@ export const getCategories = () => {
             .catch(err => {
                 const errors = err?.response?.data?.errors;
                 dispatch(getCategoriesError(errors));
+                return Promise.reject(errors);
+            });
+    };
+};
+
+export const addCategory = (category) => {
+    return dispatch => {
+        dispatch(addCategoryStart());
+
+        return addCategoryRequest(category)
+            .then(res => {
+                const addedCategory = res?.data?.data?.category;
+                dispatch(addCategorySuccess(addedCategory));
+                return Promise.resolve(addedCategory);
+            })
+            .catch(err => {
+                const errors = err?.response?.data?.errors;
+                dispatch(addCategoryError(errors));
                 return Promise.reject(errors);
             });
     };

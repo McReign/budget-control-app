@@ -1,39 +1,15 @@
 import './PeriodSlider.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
-import { Slider } from '../Slider/Slider';
 import { Typography } from 'antd';
-
-const MONTHS_NAMES = {
-    'January': 'Январь',
-    'February': 'Февраль',
-    'March': 'Март',
-    'April': 'Апрель',
-    'May': 'Май',
-    'June': 'Июнь',
-    'July': 'Июль',
-    'August': 'Август',
-    'September': 'Сентябрь',
-    'October': 'Октябрь',
-    'November': 'Ноябрь',
-    'December': 'Декабрь',
-};
+import { Slider } from '../Slider/Slider';
+import { generatePeriod } from '../../utils/generatePeriod';
 
 const MONTHS_COUNT = 24;
-const CURRENT_MONTH_POSITION = (MONTHS_COUNT / 2) - 1;
-
-const generatePeriod = (date) => {
-    const start = moment(date).startOf('month').toISOString(true);
-    const end = moment(date).endOf('month').toISOString(true);
-    const year = moment(date).format('YYYY');
-    const slug = moment(date).format('MMMM');
-    const name = MONTHS_NAMES[slug];
-
-    return { start, end, slug, name, year };
-};
+const CURRENT_MONTH_POSITION = MONTHS_COUNT / 2;
 
 const generatePeriods = (basePeriod) => {
-    return [...Array(MONTHS_COUNT)].map((_, index) => index - (MONTHS_COUNT / 2)).reduce((acc, index) => {
+    return [...Array(MONTHS_COUNT)].map((_, index) => index - CURRENT_MONTH_POSITION).reduce((acc, index) => {
         const month = moment(basePeriod.start).add(index, 'months');
         const period = generatePeriod(month);
         return [...acc, period];

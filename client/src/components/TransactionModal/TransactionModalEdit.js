@@ -108,6 +108,10 @@ export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onC
         setOwnTransaction(ownTransaction => ({ ...ownTransaction, note: e?.target?.value }));
     };
 
+    const handleTagsChange = (tags) => {
+        setOwnTransaction(ownTransaction => ({ ...ownTransaction, tags }));
+    };
+
     return (
         <Modal
             className='transaction-modal'
@@ -118,18 +122,35 @@ export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onC
             footer={null}
         >
             <Form layout="vertical" form={form} onFinish={handleFinish}>
-                <Form.Item
-                    label="Сумма"
-                    name="amount"
-                    rules={[{ required: true, message: EMPTY_FIELD_ERROR }]}
-                >
-                    <InputNumber
-                        className='transaction-modal__amount-input'
-                        value={ownTransaction.amount}
-                        placeholder={'Сумма'}
-                        formatter={value => (value && withRubleSign(value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')) || ''}
-                        onChange={handleAmountChange}
-                    />
+                <Form.Item noStyle>
+                    <Row gutter={10}>
+                        <Col span={12}>
+                            <Form.Item
+                                label="Сумма"
+                                name="amount"
+                                rules={[{ required: true, message: EMPTY_FIELD_ERROR }]}
+                            >
+                                <InputNumber
+                                    className='transaction-modal__amount-input'
+                                    value={ownTransaction.amount}
+                                    placeholder={'Введите сумму...'}
+                                    formatter={value => (value && withRubleSign(value).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')) || ''}
+                                    onChange={handleAmountChange}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item label="Дата операции" name="date">
+                                <DatePicker
+                                    className='transaction-modal__date-input'
+                                    value={moment(ownTransaction.date)}
+                                    format={'DD.MM.YYYY'}
+                                    placeholder={'Введите дату операции...'}
+                                    onChange={handleDateChange}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 </Form.Item>
 
                 <Form.Item noStyle>
@@ -142,7 +163,7 @@ export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onC
                             >
                                 <Select
                                     value={ownTransaction.type}
-                                    placeholder={'Тип операции'}
+                                    placeholder={'Введите тип операции...'}
                                     onChange={handleTypeChange}
                                 >
                                     <Select.Option value='EXPENSE'>Расход</Select.Option>
@@ -159,7 +180,7 @@ export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onC
                                 <Select
                                     value={ownTransaction.category?.id}
                                     showSearch
-                                    placeholder={'Категория'}
+                                    placeholder={'Введите категорию...'}
                                     optionFilterProp='children'
                                     onChange={handleCategoryChange(categories[ownTransaction.type] || [])}
                                 >
@@ -173,24 +194,21 @@ export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onC
                         </Col>
                     </Row>
                 </Form.Item>
-                <Form.Item
-                    label="Дата операции"
-                    name="date"
-                    rules={[{ required: true, message: EMPTY_FIELD_ERROR }]}
-                >
-                    <DatePicker
-                        className='transaction-modal__date-input'
-                        value={moment(ownTransaction.date)}
-                        format={'DD.MM.YYYY'}
-                        placeholder={'Дата операции'}
-                        onChange={handleDateChange}
+
+                <Form.Item label="Тэги" name="tags">
+                    <Select
+                        mode='tags'
+                        value={ownTransaction.tags}
+                        placeholder={'Добавьте тэги...'}
+                        notFoundContent={null}
+                        onChange={handleTagsChange}
                     />
                 </Form.Item>
 
                 <Form.Item label="Заметка" name="note">
                     <Input.TextArea
                         value={ownTransaction.note}
-                        placeholder={'Заметка'}
+                        placeholder={'Введите заметку...'}
                         rows={2}
                         onChange={handleNoteChange}
                     />

@@ -17,6 +17,7 @@ const closeNotification = require('./controllers/closeNotification');
 const inviteToWallet = require('./controllers/inviteToWallet');
 const acceptInvitation = require('./controllers/acceptInvitation');
 const cancelInvitation = require('./controllers/cancelInvitation');
+const addCategory = require('./controllers/addCategory');
 const getUsers = require('./controllers/getUsers');
 
 const router = new Router({ prefix: '/api' });
@@ -31,6 +32,7 @@ router.get('/notifications', mustBeAuthenticated, getNotifications);
 router.post('/users/register', register);
 router.post('/users/login', login);
 router.post('/users/logout', mustBeAuthenticated, logout);
+router.post('/categories/add', mustBeAuthenticated, addCategory);
 router.post('/wallets/:walletId/balance', mustBeAuthenticated, mustBeWalletOwner, setWalletBalance);
 router.post('/wallets/:walletId/operations', mustBeAuthenticated, mustBeWalletOwner, addOperation);
 router.post('/wallets/:walletId/invite', mustBeAuthenticated, mustBeWalletOwner, inviteToWallet);

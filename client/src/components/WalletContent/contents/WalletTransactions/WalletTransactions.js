@@ -25,12 +25,14 @@ import { withRubleSign } from '../../../../utils/withRubleSign';
 import { AddButton } from '../../../AddButton/AddButton';
 import { TransactionModalEdit } from '../../../TransactionModal/TransactionModalEdit';
 import { addOperation } from '../../../../store/modules/wallets/thunks';
-import { ERROR_MESSAGE_DURATION } from '../../../../constants/errors';
 import { withNumberGroupSeparator } from '../../../../utils/withNumberGroupSeparator';
-import { toDisplayDate } from '../../../../utils/toDisplayDate';
+import { DISPLAY_DATE_FORMAT, toDisplayDate } from '../../../../utils/toDisplayDate';
 import { userSelector } from '../../../../store/modules/user/selectors';
 import { TransactionModalView } from '../../../TransactionModal/TransactionModalView';
 import { UsersSlider } from '../../../UsersSlider/UsersSlider';
+import { sortArray } from '../../../../utils/sortArray';
+import moment from 'moment';
+import { handleErrors } from '../../../../utils/handleErrors';
 
 export const WalletTransactions = () => {
     const { walletId } = useParams();
@@ -89,7 +91,7 @@ export const WalletTransactions = () => {
         closeAddModal();
         dispatch(addOperation(walletId, operation))
             // .then(closeAddModal)
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION));
+            .catch(handleErrors(message));
     };
 
     const renderTransactionsBlock = () => {
@@ -111,13 +113,16 @@ export const WalletTransactions = () => {
             },
         ];
 
+        const getSortedDates = dates => sortArray(dates, date => moment(date, DISPLAY_DATE_FORMAT));
+        const getSortedTransactions = transactions => sortArray(transactions, transaction => moment(transaction.date));
+
         return (
             <Tabs defaultActiveKey='expense'>
                 {tabs.map(({ key, name, transactions }) => {
                     const dates = (transactions && Object.keys(transactions)) || [];
                     return (
                         <Tabs.TabPane tab={name} key={key}>
-                            {dates.length ? dates.map(date => (
+                            {dates.length ? getSortedDates(dates).map(date => (
                                 <Row
                                     key={date}
                                     className='wallet-transactions__dated-operations-wrapper'
@@ -142,7 +147,7 @@ export const WalletTransactions = () => {
                                     </Col>
                                     <Col span={24}>
                                         <div className='wallet-transactions__dated-operations'>
-                                            {(transactions[date] || []).map(transaction => (
+                                            {getSortedTransactions((transactions[date] || [])).map(transaction => (
                                                 <Card
                                                     key={transaction.id}
                                                     hoverable

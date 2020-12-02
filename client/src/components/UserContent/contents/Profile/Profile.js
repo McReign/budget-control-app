@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Row, Typography } from 'antd';
+import { Avatar, Col, Row, Space, Typography } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import { userSelector } from '../../../../store/modules/user/selectors';
 
 export const Profile = () => {
@@ -10,7 +11,12 @@ export const Profile = () => {
         return (
             <Row className='profile'>
                 <Col span={24}>
-                    <Typography.Title>{user?.displayName}</Typography.Title>
+                    <Typography.Title>
+                        <Space direction='horizontal' align='center' size={14}>
+                            <Avatar size={52} icon={<UserOutlined />} />
+                            {user?.displayName}
+                        </Space>
+                    </Typography.Title>
                 </Col>
                 <Col span={24}>
                     <Typography.Title level={4}>

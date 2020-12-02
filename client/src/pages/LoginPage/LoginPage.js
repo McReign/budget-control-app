@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Form, Input, Button, Checkbox, Row, Col, Typography, Card, message, Tabs } from 'antd';
 import { LoginLayout } from '../layouts/LoginLayout/LoginLayout';
-import { EMPTY_FIELD_ERROR, ERROR_MESSAGE_DURATION } from '../../constants/errors';
+import { EMPTY_FIELD_ERROR } from '../../constants/errors';
 import { getUser, loginUser, registerUser } from '../../store/modules/user/thunks';
 import { isLoadingSelector } from '../../store/modules/user/selectors';
+import { handleErrors } from '../../utils/handleErrors';
 
 export const LoginPage = () => {
     const history = useHistory();
@@ -23,13 +24,13 @@ export const LoginPage = () => {
         dispatch(loginUser(email, password, remember))
             .then(() => dispatch(getUser()))
             .then((user) => history.push(`/wallets/${user?.activeWallet}`))
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION));
+            .catch(handleErrors(message));
     };
 
     const onRegisterFinish = ({ email, displayName, password }) => {
         dispatch(registerUser(email, displayName, password))
             .then(() => history.push('/'))
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION));
+            .catch(handleErrors(message));
     };
 
     const renderLoginForm = () => {

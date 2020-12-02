@@ -10,3 +10,13 @@ export const getCategoriesRequest = () => {
         },
     );
 };
+
+export const addCategoryRequest = ({ displayName, type }) => {
+    return apiService.post(
+        '/api/categories/add',
+        { displayName, type },
+        {
+            headers: withAuthorizationToken(),
+        },
+    );
+};

@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { message } from 'antd';
 
-import { ERROR_MESSAGE_DURATION } from '../../../../constants/errors';
 import { Invitation } from './Invitation';
 import { acceptInvitation, cancelInvitation } from '../../../../store/modules/notifications/thunks';
 import { getUserData } from '../../../../store/modules/user/thunks';
+import { handleErrors } from '../../../../utils/handleErrors';
 
 export const InvitationWithStore = (props) => {
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export const InvitationWithStore = (props) => {
         setIsCancelLoading(true);
         return dispatch(cancelInvitation(invitationId))
             .then(() => dispatch(getUserData()))
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION))
+            .catch(handleErrors(message))
             .finally(() => setIsCancelLoading(false));
     }, []);
 
@@ -24,7 +24,7 @@ export const InvitationWithStore = (props) => {
         setIsAcceptLoading(true);
         return dispatch(acceptInvitation(invitationId))
             .then(() => dispatch(getUserData()))
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION))
+            .catch(handleErrors(message))
             .finally(() => setIsAcceptLoading(false));
     }, []);
 
