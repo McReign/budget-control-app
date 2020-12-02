@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux';
 import { Switch, Route } from "react-router-dom";
 import { MainLayout } from '../layouts/MainLayout/MainLayout'
 import { RequestStatus, RequestWrapper } from '../../components/RequestWrapper/RequestWrapper';
-import { getNotifications, getUser } from '../../store/modules/user/thunks';
+import { getUser, getUserData } from '../../store/modules/user/thunks';
+import { getNotifications } from '../../store/modules/notifications/thunks';
 import { getWalletOperations, getWallets } from '../../store/modules/wallets/thunks';
 import { getCategories } from '../../store/modules/categories/thunks';
 import { LeftSiderWithStore } from '../../components/LeftSider/LeftSiderWithStore';
@@ -21,29 +22,13 @@ export const HomePage = () => {
 
     const fetchUserData = () => {
         setRequestStatus(RequestStatus.LOADING);
-        return Promise.all([fetchUser(), fetchWallets(), fetchNotifications()])
+        return dispatch(getUserData())
             .then(() => setRequestStatus(RequestStatus.LOADED))
             .catch(() => setRequestStatus(RequestStatus.ERROR));
     };
 
-    const fetchWalletData = (walletId) => {
-        return dispatch(getWalletOperations(walletId));
-    };
-
     const fetchCategoriesData = () => {
         return dispatch(getCategories());
-    };
-
-    const fetchUser = () => {
-        return dispatch(getUser());
-    };
-
-    const fetchWallets = () => {
-        return dispatch(getWallets());
-    };
-
-    const fetchNotifications = () => {
-        return dispatch(getNotifications());
     };
 
     return (

@@ -13,7 +13,9 @@ export const NotificationsDrawer = ({ visible, notifications, onClose }) => {
             visible={visible}
         >
             {notifications && notifications.length ? (
-                notifications.map(notification => <Notification notification={notification} />)
+                notifications.map(notification => (
+                    <Notification key={notification.id} notification={notification} />
+                ))
             ) : (
                 <Empty description='Список пуст' />
             )}

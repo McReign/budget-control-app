@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { Button, Card, Col, Row, Typography } from 'antd';
 import { toDisplayDateTime } from '../../../../utils/toDisplayDateTime';
 
-export const Invitation = ({ notification, onCancel, onAccept }) => {
+export const Invitation = ({ notification, isAcceptLoading, isCancelLoading, onCancel, onAccept }) => {
     const createdAt = notification?.createdAt;
     const content = notification?.content;
 
@@ -33,12 +33,22 @@ export const Invitation = ({ notification, onCancel, onAccept }) => {
                 <Col span={24}>
                     <Row justify='end' gutter={10}>
                         <Col>
-                            <Button danger onClick={handleCancel}>
+                            <Button
+                                danger
+                                loading={isCancelLoading}
+                                disabled={isAcceptLoading}
+                                onClick={handleCancel}
+                            >
                                 Отклонить
                             </Button>
                         </Col>
                         <Col>
-                            <Button type='primary' onClick={handleAccept}>
+                            <Button
+                                type='primary'
+                                loading={isAcceptLoading}
+                                disabled={isCancelLoading}
+                                onClick={handleAccept}
+                            >
                                 Принять
                             </Button>
                         </Col>
