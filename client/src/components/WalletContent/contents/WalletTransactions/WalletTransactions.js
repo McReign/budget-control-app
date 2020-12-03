@@ -1,9 +1,11 @@
 import './WalletTransactions.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useLocation } from 'react-router-dom';
-import { Card, Col, Row, Tabs, Typography, Empty, Space, message, Divider } from 'antd';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
+import { Card, Col, Row, Tabs, Typography, Empty, Space, message, Divider, Tag } from 'antd';
 import { ArrowRightOutlined, UserOutlined } from '@ant-design/icons';
+import moment from 'moment';
+
 import { RequestWrapper } from '../../../RequestWrapper/RequestWrapper';
 import { mapStoreRequestStateToRequestStatus } from '../../../../utils/mapStoreRequestStateToRequestStatus';
 import {
@@ -17,9 +19,13 @@ import {
     walletIncomesEnhancer,
     walletUsersEnhancer,
     walletCategorizedOperationsEnhancer,
-    walletOperationsByUserEnhancer, walletDatedOperations, walletOperationsSumEnhancer,
+    walletOperationsByUserEnhancer,
+    walletDatedOperations,
+    walletOperationsSumEnhancer,
+    walletUserEnhancer,
+    walletOperationsByPeriodEnhancer,
 } from '../../../../store/modules/wallets/selectorEnhancers';
-import { categoriesSelector } from '../../../../store/modules/categories/selectors';
+import { walletCategoriesSelector } from '../../../../store/modules/categories/selectors';
 import { categoryEnhancer } from '../../../../store/modules/categories/selectorEnhancers';
 import { withRubleSign } from '../../../../utils/withRubleSign';
 import { AddButton } from '../../../AddButton/AddButton';
@@ -31,15 +37,19 @@ import { userSelector } from '../../../../store/modules/user/selectors';
 import { TransactionModalView } from '../../../TransactionModal/TransactionModalView';
 import { UsersSlider } from '../../../UsersSlider/UsersSlider';
 import { sortArray } from '../../../../utils/sortArray';
-import moment from 'moment';
 import { handleErrors } from '../../../../utils/handleErrors';
+import { PeriodSlider } from '../../../PeriodSlider/PeriodSlider';
+import { generatePeriod } from '../../../../utils/generatePeriod';
 
 export const WalletTransactions = () => {
     const { walletId } = useParams();
     const { search } = useLocation();
+    const history = useHistory();
 
     const query = new URLSearchParams(search);
     const category = query.get('category');
+    const user = query.get('user');
+    const period = (query.get('period') || '').split(',');
 
     const dispatch = useDispatch();
 
@@ -47,27 +57,33 @@ export const WalletTransactions = () => {
     const [addModalVisible, setAddModalVisible] = useState(false);
     const [openedOperation, setOpenedOperation] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedPeriod, setSelectedPeriod] = useState(period || [null, null]);
 
     const currentUser = useSelector(userSelector);
     const isOperationsLoading = useSelector(isLoadingSelector);
     const operationsError = useSelector(errorsSelector);
 
-    const categories = useSelector(categoriesSelector);
+    const categories = useSelector(walletCategoriesSelector);
     const currentCategory = categoryEnhancer(categories)(category);
 
     const wallet = walletEnhancer(useSelector(walletsSelector))(walletId);
     const users = walletUsersEnhancer(wallet);
     const operations = useSelector(walletOperationsSelector)(walletId);
     const operationsByUser = selectedUser ? walletOperationsByUserEnhancer(operations)(selectedUser.id) : operations;
-    const operationsByUserAndCategory = category ?
-        (walletCategorizedOperationsEnhancer(operationsByUser)[category] || [])
-        : operationsByUser;
-    const expensesByUserAndCategory = walletExpensesEnhancer(operationsByUserAndCategory);
-    const incomesByUserAndCategory = walletIncomesEnhancer(operationsByUserAndCategory);
+    const operationsByPeriod = walletOperationsByPeriodEnhancer(operationsByUser)(selectedPeriod);
+    const operationsByUserCategoryPeriod = category ?
+        (walletCategorizedOperationsEnhancer(operationsByPeriod)[category] || [])
+        : operationsByPeriod;
+    const expensesByUserPeriodCategory = walletExpensesEnhancer(operationsByUserCategoryPeriod);
+    const incomesByUserPeriodCategory = walletIncomesEnhancer(operationsByUserCategoryPeriod);
 
-    const datedOperationsByUserAndCategory = walletDatedOperations(operationsByUserAndCategory);
-    const datedExpensesByUserAndCategory = walletDatedOperations(expensesByUserAndCategory);
-    const datedIncomesByUserAndCategory = walletDatedOperations(incomesByUserAndCategory);
+    const datedOperationsByUserAndCategory = walletDatedOperations(operationsByUserCategoryPeriod);
+    const datedExpensesByUserAndCategory = walletDatedOperations(expensesByUserPeriodCategory);
+    const datedIncomesByUserAndCategory = walletDatedOperations(incomesByUserPeriodCategory);
+
+    useLayoutEffect(() => {
+        setSelectedUser(walletUserEnhancer(users)(user))
+    }, [users]);
 
     const openAddModal = () => {
         setAddModalVisible(true);
@@ -92,6 +108,21 @@ export const WalletTransactions = () => {
         dispatch(addOperation(walletId, operation))
             // .then(closeAddModal)
             .catch(handleErrors(message));
+    };
+
+    const generateTransactionsLinkQuery = (category, user, period) => {
+        const queryParams = new URLSearchParams();
+
+        category && queryParams.append('category', category.slug);
+        user && queryParams.append('user', user.id);
+        period && queryParams.append('period', period);
+
+        return queryParams.toString();
+    }
+
+    const handleClearCategory = (e) => {
+        e.preventDefault();
+        history.push({ search: generateTransactionsLinkQuery(null, selectedUser, selectedPeriod) });
     };
 
     const renderTransactionsBlock = () => {
@@ -178,7 +209,7 @@ export const WalletTransactions = () => {
                                                         <Col>
                                                             <Space direction='horizontal' size={10}>
                                                                 <Typography.Text type='secondary'>
-                                                                    {transaction.category.displayName}
+                                                                    {transaction.category?.displayName}
                                                                 </Typography.Text>
                                                                 <ArrowRightOutlined />
                                                             </Space>
@@ -201,7 +232,27 @@ export const WalletTransactions = () => {
     };
 
     const renderUsersSlider = () => {
-        return <UsersSlider selected={selectedUser} users={users} onChange={setSelectedUser} />;
+        return (
+            <UsersSlider
+                key={selectedUser?.id}
+                selected={selectedUser}
+                users={users}
+                onChange={setSelectedUser}
+            />
+        );
+    };
+
+    const getDatesMidPoint = (dates) => {
+        return moment((moment(dates[0]).valueOf() + moment(dates[1]).valueOf()) / 2);
+    };
+
+    const renderPeriodSlider = () => {
+        return (
+            <PeriodSlider
+                selected={generatePeriod(getDatesMidPoint(selectedPeriod))}
+                onChange={setSelectedPeriod}
+            />
+        );
     };
 
     const shouldRenderUsersSlider = () => {
@@ -212,15 +263,24 @@ export const WalletTransactions = () => {
         return (
             <Row className='wallet-transactions'>
                 <Col span={14}>
-                    <Row gutter={15} className='wallet-transactions__title-row'>
-                        <Col>
-                            <Typography.Title>Транзакции</Typography.Title>
+                    <Row gutter={[15, 10]} className='wallet-transactions__title-row'>
+                        <Col span={24}>
+                            <Typography.Title className='wallet-transactions__title'>Транзакции</Typography.Title>
                         </Col>
                         {currentCategory && (
-                            <Col>
-                                <Typography.Title level={3}>
-                                    <Typography.Text type='secondary'>{currentCategory.displayName}</Typography.Text>
-                                </Typography.Title>
+                            <Col span={24}>
+                                <Tag
+                                    className='wallet-transactions__category-tag'
+                                    closable
+                                    onClose={handleClearCategory}
+                                >
+                                    <Typography.Text
+                                        className='wallet-transactions__category-tag-text'
+                                        type='secondary'
+                                    >
+                                        {currentCategory?.displayName}
+                                    </Typography.Text>
+                                </Tag>
                             </Col>
                         )}
                     </Row>
@@ -231,6 +291,10 @@ export const WalletTransactions = () => {
                                     <Divider className='wallet-transactions__divider' type='horizontal' />
                                 </Col>
                                 <Col span={24}>{renderUsersSlider()}</Col>
+                                <Col span={24}>
+                                    <Divider className='wallet-transactions__divider' type='horizontal' />
+                                </Col>
+                                <Col span={24}>{renderPeriodSlider()}</Col>
                                 <Col span={24}>
                                     <Divider className='wallet-transactions__divider' type='horizontal' />
                                 </Col>

@@ -17,11 +17,11 @@ const categorySchema = new mongoose.Schema({
     enum: Object.values(OperationType),
     required: true,
   },
-  user: {
+  users: [{
     type: mongoose.Types.ObjectId,
     ref: 'User',
     default: null,
-  },
+  }],
 });
 
 module.exports = connection.model('Category', categorySchema);

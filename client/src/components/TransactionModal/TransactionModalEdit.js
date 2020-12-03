@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Button, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, Space } from 'antd';
 import { EMPTY_FIELD_ERROR } from '../../constants/errors';
 import { withRubleSign } from '../../utils/withRubleSign';
-import { categoriesSelector } from '../../store/modules/categories/selectors';
+import { walletCategoriesSelector } from '../../store/modules/categories/selectors';
 import { incomeCategoriesEnhancer, expenseCategoriesEnhancer } from '../../store/modules/categories/selectorEnhancers';
 import moment from 'moment';
 
@@ -44,8 +44,9 @@ const generateButtons = (isNew, loading, onSave, onAdd, onCancel) => {
 
 export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onCancel, onSave, onAdd }) => {
     const [ownTransaction, setOwnTransaction] = useState(transaction || {});
-    const incomeCategories = incomeCategoriesEnhancer(useSelector(categoriesSelector));
-    const expenseCategories = expenseCategoriesEnhancer(useSelector(categoriesSelector));
+    const categories = useSelector(walletCategoriesSelector);
+    const incomeCategories = incomeCategoriesEnhancer(categories);
+    const expenseCategories = expenseCategoriesEnhancer(categories);
 
     const [form] = Form.useForm();
 
@@ -60,7 +61,7 @@ export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onC
 
     const title = isNew ? 'Добавление транзакции' : 'Транзакция';
 
-    const categories = {
+    const typedCategories = {
         'INCOME': incomeCategories,
         'EXPENSE': expenseCategories,
     };
@@ -95,7 +96,7 @@ export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onC
         if (!categoryId) {
             setOwnTransaction(ownTransaction => ({ ...ownTransaction, category: null }))
         }
-        const category = categories.find(category => category.id === categoryId);
+        const category = categories.find(category => category?.id === categoryId);
         setOwnTransaction(ownTransaction => ({ ...ownTransaction, category }));
     };
 
@@ -182,11 +183,11 @@ export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onC
                                     showSearch
                                     placeholder={'Введите категорию...'}
                                     optionFilterProp='children'
-                                    onChange={handleCategoryChange(categories[ownTransaction.type] || [])}
+                                    onChange={handleCategoryChange(typedCategories[ownTransaction.type] || [])}
                                 >
-                                    {(categories[ownTransaction.type] || []).map(category => (
-                                        <Select.Option key={category.id} value={category.id}>
-                                            {category.displayName}
+                                    {(typedCategories[ownTransaction.type] || []).map(category => (
+                                        <Select.Option key={category?.id} value={category.id}>
+                                            {category?.displayName}
                                         </Select.Option>
                                     ))}
                                 </Select>

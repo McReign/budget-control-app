@@ -71,6 +71,16 @@ export const WalletSummary = () => {
             .catch(handleErrors(message));
     };
 
+    const generateTransactionsLinkQuery = (category, user, period) => {
+        const queryParams = new URLSearchParams();
+
+        category && queryParams.append('category', category.slug);
+        user && queryParams.append('user', user.id);
+        period && queryParams.append('period', period);
+
+        return queryParams.toString();
+    }
+
     const renderBalanceBlock = () => {
         const alertType = balance > 0 ? 'success' : balance < 0 ? 'error' : 'info';
 
@@ -144,7 +154,7 @@ export const WalletSummary = () => {
                                     key={category?.slug}
                                     to={{
                                         pathname: `/wallets/${walletId}/${WalletMenuKey.TRANSACTIONS}`,
-                                        search: `category=${category?.slug}`,
+                                        search: generateTransactionsLinkQuery(category, selectedUser, selectedPeriod),
                                     }}
                                 >
                                     <Card hoverable size='small'>
@@ -156,7 +166,7 @@ export const WalletSummary = () => {
                                                 <Space direction='horizontal'>
                                                     <Typography.Text strong>
                                                         {withRubleSign(
-                                                            withNumberGroupSeparator(categoriesSums[category.slug], ' ')
+                                                            withNumberGroupSeparator(categoriesSums[category?.slug], ' ')
                                                         )}
                                                     </Typography.Text>
                                                     <ArrowRightOutlined />

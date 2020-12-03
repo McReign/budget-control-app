@@ -29,11 +29,17 @@ const generatePeriods = (basePeriod) => {
     // return periods;
 };
 
-export const PeriodSlider = ({ onChange }) => {
+export const PeriodSlider = ({ selected, onChange }) => {
     const [periods, setPeriods] = useState(generatePeriods(generatePeriod(new Date())));
 
+    const selectedIndex = periods.findIndex(period => {
+        return period?.start === selected?.start && period?.end === selected?.end;
+    });
+
+    const initialSlide = selected && !!~selectedIndex ? selectedIndex : CURRENT_MONTH_POSITION;
+
     useEffect(() => {
-        handleChange(CURRENT_MONTH_POSITION);
+        handleChange(initialSlide);
     }, [])
 
     const renderPeriodItem = useCallback((period) => {
@@ -57,7 +63,7 @@ export const PeriodSlider = ({ onChange }) => {
     return (
         <Slider
             className='period-slider'
-            initialSlide={CURRENT_MONTH_POSITION}
+            initialSlide={initialSlide}
             items={periods}
             renderItem={renderPeriodItem}
             afterChange={handleChange}

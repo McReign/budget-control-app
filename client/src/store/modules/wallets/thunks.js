@@ -14,6 +14,7 @@ import {
 } from './actions';
 import { getWalletsRequest, getWalletOperationsRequest, inviteUserRequest } from '../../../api/wallets';
 import { addOperationRequest } from '../../../api/operations';
+import { getWalletCategories } from '../categories/thunks';
 
 export const getWallets = () => {
     return dispatch => {
@@ -48,6 +49,15 @@ export const getWalletOperations = (walletId) => {
                 dispatch(getWalletOperationsError(errors));
                 return Promise.reject(errors);
             });
+    };
+};
+
+export const getWalletData = (walletId) => {
+    return dispatch => {
+        return Promise.all([
+            dispatch(getWalletOperations(walletId)),
+            dispatch(getWalletCategories(walletId)),
+        ]);
     };
 };
 

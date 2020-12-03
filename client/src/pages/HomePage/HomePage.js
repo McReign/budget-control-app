@@ -3,10 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Switch, Route } from "react-router-dom";
 import { MainLayout } from '../layouts/MainLayout/MainLayout'
 import { RequestStatus, RequestWrapper } from '../../components/RequestWrapper/RequestWrapper';
-import { getUser, getUserData } from '../../store/modules/user/thunks';
-import { getNotifications } from '../../store/modules/notifications/thunks';
-import { getWalletOperations, getWallets } from '../../store/modules/wallets/thunks';
-import { getCategories } from '../../store/modules/categories/thunks';
+import { getUserData } from '../../store/modules/user/thunks';
 import { LeftSiderWithStore } from '../../components/LeftSider/LeftSiderWithStore';
 import { WalletContent } from '../../components/WalletContent/WalletContent';
 import { UserContent } from '../../components/UserContent/UserContent';
@@ -17,7 +14,6 @@ export const HomePage = () => {
 
     useEffect(() => {
         fetchUserData();
-        fetchCategoriesData();
     }, []);
 
     const fetchUserData = () => {
@@ -25,10 +21,6 @@ export const HomePage = () => {
         return dispatch(getUserData())
             .then(() => setRequestStatus(RequestStatus.LOADED))
             .catch(() => setRequestStatus(RequestStatus.ERROR));
-    };
-
-    const fetchCategoriesData = () => {
-        return dispatch(getCategories());
     };
 
     return (

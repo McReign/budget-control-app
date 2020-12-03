@@ -8,7 +8,7 @@ import { WalletTransactions } from './contents/WalletTransactions/WalletTransact
 import { WalletUsers } from './contents/WalletUsers/WalletUsers';
 
 import { WalletMenuKey } from '../LeftSider/menus/WalletMenu/WalletMenu';
-import { getWalletOperations } from '../../store/modules/wallets/thunks';
+import { getWalletData } from '../../store/modules/wallets/thunks';
 import { RequestWrapper } from '../RequestWrapper/RequestWrapper';
 import { mapStoreRequestStateToRequestStatus } from '../../utils/mapStoreRequestStateToRequestStatus';
 import { errorsSelector, isLoadingSelector, walletsSelector } from '../../store/modules/wallets/selectors';
@@ -23,7 +23,7 @@ export const WalletContent = () => {
     const wallet = walletEnhancer(useSelector(walletsSelector))(walletId);
 
     useEffect(() => {
-        dispatch(getWalletOperations(walletId));
+        dispatch(getWalletData(walletId));
     }, [walletId]);
 
     if (!tab) {

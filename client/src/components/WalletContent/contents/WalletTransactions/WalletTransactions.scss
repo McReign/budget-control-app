@@ -19,6 +19,11 @@
   &__title-row {
     display: flex;
     align-items: baseline;
+    margin-bottom: 20px !important;
+  }
+
+  &__title {
+    margin-bottom: 0 !important;
   }
 
   &__dated-operations-wrapper {
@@ -33,5 +38,19 @@
 
   &__dated-operations-date {
     padding: 0 12px;
+  }
+
+  &__category-tag {
+    display: inline-flex;
+    align-items: baseline;
+    padding: 4px 7px;
+
+    &-text {
+      font-size: 18px;
+    }
+
+    .ant-tag-close-icon {
+      font-size: 12px;
+    }
   }
 }

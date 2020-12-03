@@ -9,6 +9,10 @@ export const walletUsersEnhancer = (wallet) => {
     return wallet?.users || [];
 };
 
+export const walletUserEnhancer = (users) => (userId) => {
+    return users.find(user => user.id === userId);
+};
+
 export const walletBalanceEnhancer = (wallet) => {
     return wallet?.balance;
 };
@@ -28,12 +32,12 @@ export const walletExpensesEnhancer = (operations) => {
 export const walletCategorizedOperationsEnhancer = (operations) => {
     return operations.reduce((acc, operation) => ({
         ...acc,
-        [operation.category.slug]: [...(acc[operation.category.slug] || []), operation],
+        [operation.category?.slug]: [...(acc[operation.category?.slug] || []), operation],
     }), {});
 };
 
 export const walletUsedCategoriesEnhancer = (operations) => {
-    return uniqBy(operations.map(operation => operation.category), category => category.slug);
+    return uniqBy(operations.map(operation => operation.category), category => category?.slug);
 };
 
 export const walletOperationsSumEnhancer = (operations) => {

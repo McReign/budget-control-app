@@ -3,7 +3,8 @@ const Router = require('koa-router');
 const mustBeAuthenticated = require('./middlewares/mustBeAuthenticated');
 const mustBeWalletOwner = require('./middlewares/mustBeWalletOwner');
 
-const getCategories = require('./controllers/getCategories');
+const getCategoriesByUser = require('./controllers/getCategoriesByUser');
+const getCategoriesByWallet = require('./controllers/getCategoriesByWallet');
 const register = require('./controllers/register');
 const login = require('./controllers/login');
 const logout = require('./controllers/logout');
@@ -22,7 +23,7 @@ const getUsers = require('./controllers/getUsers');
 
 const router = new Router({ prefix: '/api' });
 
-router.get('/categories', mustBeAuthenticated, getCategories);
+router.get('/categories', mustBeAuthenticated, getCategoriesByWallet, getCategoriesByUser);
 router.get('/users', mustBeAuthenticated, getUsers);
 router.get('/users/me', mustBeAuthenticated, me);
 router.get('/wallets', mustBeAuthenticated, getWallets);

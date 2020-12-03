@@ -1,26 +1,47 @@
 import {
-    getCategoriesError,
-    getCategoriesStart,
-    getCategoriesSuccess,
+    getPersonalCategoriesError,
+    getPersonalCategoriesStart,
+    getPersonalCategoriesSuccess,
+    getWalletCategoriesError,
+    getWalletCategoriesStart,
+    getWalletCategoriesSuccess,
     addCategoryError,
     addCategoryStart,
     addCategorySuccess,
 } from './actions';
 import { getCategoriesRequest, addCategoryRequest } from '../../../api/categories';
 
-export const getCategories = () => {
+export const getPersonalCategories = () => {
     return dispatch => {
-        dispatch(getCategoriesStart());
+        dispatch(getPersonalCategoriesStart());
 
         return getCategoriesRequest()
             .then(res => {
                 const categories = res?.data?.data?.categories;
-                dispatch(getCategoriesSuccess(categories));
+                dispatch(getPersonalCategoriesSuccess(categories));
                 return Promise.resolve(categories);
             })
             .catch(err => {
                 const errors = err?.response?.data?.errors;
-                dispatch(getCategoriesError(errors));
+                dispatch(getPersonalCategoriesError(errors));
+                return Promise.reject(errors);
+            });
+    };
+};
+
+export const getWalletCategories = (walletId) => {
+    return dispatch => {
+        dispatch(getWalletCategoriesStart());
+
+        return getCategoriesRequest({ walletId })
+            .then(res => {
+                const categories = res?.data?.data?.categories;
+                dispatch(getWalletCategoriesSuccess(categories));
+                return Promise.resolve(categories);
+            })
+            .catch(err => {
+                const errors = err?.response?.data?.errors;
+                dispatch(getWalletCategoriesError(errors));
                 return Promise.reject(errors);
             });
     };

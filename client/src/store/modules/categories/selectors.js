@@ -1,9 +1,9 @@
-export const categoriesErrorsSelector = (state) => {
-    return state.categoriesState.categories.error;
+export const personalCategoriesErrorsSelector = (state) => {
+    return state.categoriesState.personalCategories.error;
 };
 
-export const categoriesLoadingSelector = (state) => {
-    return state.categoriesState.categories.loading;
+export const personalCategoriesLoadingSelector = (state) => {
+    return state.categoriesState.personalCategories.loading;
 };
 
 export const addCategoryErrorsSelector = (state) => {
@@ -14,6 +14,18 @@ export const addCategoryLoadingSelector = (state) => {
     return state.categoriesState.addCategory.loading;
 };
 
-export const categoriesSelector = (state) => {
-    return state.categoriesState.categories.list || [];
+export const personalCategoriesSelector = (state) => {
+    return state.categoriesState.personalCategories.list || [];
+};
+
+export const walletCategoriesErrorsSelector = (state) => {
+    return state.categoriesState.walletCategories.error;
+};
+
+export const walletCategoriesLoadingSelector = (state) => {
+    return state.categoriesState.walletCategories.loading;
+};
+
+export const walletCategoriesSelector = (state) => {
+    return state.categoriesState.walletCategories.list || [];
 };

@@ -13,7 +13,7 @@ import {
     Tabs, Select,
 } from 'antd';
 import { ERROR_MESSAGE_DURATION, SUCCESS_MESSAGE_DURATION } from '../../../../constants/errors';
-import { addCategoryLoadingSelector, categoriesSelector } from '../../../../store/modules/categories/selectors';
+import { addCategoryLoadingSelector, personalCategoriesSelector } from '../../../../store/modules/categories/selectors';
 import {
     expenseCategoriesEnhancer,
     incomeCategoriesEnhancer
@@ -30,7 +30,7 @@ export const Categories = () => {
     const [categoryType, setCategoryType] = useState('EXPENSE');
 
     const isAddCategoryLoading = useSelector(addCategoryLoadingSelector);
-    const categories = useSelector(categoriesSelector);
+    const categories = useSelector(personalCategoriesSelector);
     const expenseCategories = expenseCategoriesEnhancer(categories);
     const incomeCategories = incomeCategoriesEnhancer(categories);
 

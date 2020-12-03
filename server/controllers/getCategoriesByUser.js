@@ -4,10 +4,11 @@ const mapResponse = require('../mappers/response');
 
 module.exports = async function(ctx) {
     const { user } = ctx;
+
     const categories = await Category.find({
         $or: [
-            { user },
-            { user: { $exists: false } },
+            { users: user },
+            { users: { $exists: false } },
         ],
     });
 

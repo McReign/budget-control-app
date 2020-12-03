@@ -1,14 +1,22 @@
 import {
-    GET_CATEGORIES_SUCCESS,
-    GET_CATEGORIES_START,
-    GET_CATEGORIES_ERROR,
+    GET_WALLET_CATEGORIES_SUCCESS,
+    GET_WALLET_CATEGORIES_START,
+    GET_WALLET_CATEGORIES_ERROR,
+    GET_PERSONAL_CATEGORIES_SUCCESS,
+    GET_PERSONAL_CATEGORIES_START,
+    GET_PERSONAL_CATEGORIES_ERROR,
     ADD_CATEGORY_ERROR,
     ADD_CATEGORY_SUCCESS,
     ADD_CATEGORY_START,
 } from './constants';
 
 const initialState = {
-    categories: {
+    personalCategories: {
+        list: null,
+        loading: false,
+        error: null,
+    },
+    walletCategories: {
         list: null,
         loading: false,
         error: null,
@@ -21,28 +29,58 @@ const initialState = {
 
 export const categoriesReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_CATEGORIES_START:
+        case GET_PERSONAL_CATEGORIES_START:
             return {
                 ...state,
-                categories: {
-                    ...state.categories,
+                personalCategories: {
+                    ...state.personalCategories,
                     loading: true,
                     error: null,
                 },
             };
-        case GET_CATEGORIES_SUCCESS:
+        case GET_PERSONAL_CATEGORIES_SUCCESS:
             return {
                 ...state,
-                categories: {
+                personalCategories: {
+                    ...state.personalCategories,
                     loading: false,
                     error: null,
                     list: action.payload,
                 }
             };
-        case GET_CATEGORIES_ERROR:
+        case GET_PERSONAL_CATEGORIES_ERROR:
             return {
                 ...state,
-                categories: {
+                personalCategories: {
+                    ...state.personalCategories,
+                    loading: false,
+                    error: action.payload,
+                },
+            };
+        case GET_WALLET_CATEGORIES_START:
+            return {
+                ...state,
+                walletCategories: {
+                    ...state.walletCategories,
+                    loading: true,
+                    error: null,
+                },
+            };
+        case GET_WALLET_CATEGORIES_SUCCESS:
+            return {
+                ...state,
+                walletCategories: {
+                    ...state.walletCategories,
+                    loading: false,
+                    error: null,
+                    list: action.payload,
+                }
+            };
+        case GET_WALLET_CATEGORIES_ERROR:
+            return {
+                ...state,
+                walletCategories: {
+                    ...state.walletCategories,
                     loading: false,
                     error: action.payload,
                 },
@@ -64,9 +102,13 @@ export const categoriesReducer = (state = initialState, action) => {
                     loading: false,
                     error: null,
                 },
-                categories: {
-                    ...state.categories,
-                    list: [...state.categories.list, action.payload],
+                personalCategories: {
+                    ...state.personalCategories,
+                    list: [...(state.personalCategories.list || []), action.payload],
+                },
+                walletCategories: {
+                    ...state.walletCategories,
+                    list: [...(state.walletCategories.list || []), action.payload],
                 }
             };
         case ADD_CATEGORY_ERROR:

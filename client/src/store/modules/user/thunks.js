@@ -17,6 +17,7 @@ import { setAuthorizationToken } from '../../../utils/authorization/setAuthoriza
 import { clearAuthorizationToken } from '../../../utils/authorization/clearAuthorizationToken';
 import { getWallets } from '../wallets/thunks';
 import { getNotifications } from '../notifications/thunks';
+import { getPersonalCategories } from '../categories/thunks';
 
 export const loginUser = (email, password, remember) => {
     return dispatch => {
@@ -94,6 +95,11 @@ export const getUser = () => {
 
 export const getUserData = () => {
     return dispatch => {
-        return Promise.all([dispatch(getUser()), dispatch(getWallets()), dispatch(getNotifications())]);
+        return Promise.all([
+            dispatch(getUser()),
+            dispatch(getWallets()),
+            dispatch(getNotifications()),
+            dispatch(getPersonalCategories()),
+        ]);
     };
 };
