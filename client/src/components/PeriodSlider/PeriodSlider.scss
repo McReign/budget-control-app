@@ -1,0 +1,9 @@
+.period-slider {
+  $self: &;
+
+  &__period-wrapper {
+    text-align: center;
+    transition: transform 0.5s;
+    transform: scale(1.1);
+  }
+}

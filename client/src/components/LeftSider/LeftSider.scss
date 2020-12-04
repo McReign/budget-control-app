@@ -1,32 +1,54 @@
 .left-sider {
+  $self: &;
   display: flex;
   width: 100%;
   height: 100%;
   overflow: hidden;
 
-  &__mini-menu-wrapper {
+  &__main-menu-wrapper {
     display: flex;
     flex-direction: column;
     padding: 4px 10px;
     background-color: transparentize(#001529, 0.04);
   }
 
-  &__mini-menu {
-    &_top {
-
-    }
-
-    &_bottom {
-      margin-top: auto;
-    }
+  &__additional-info {
+    margin-top: auto;
   }
 
-  &__mini-menu-item {
-    $self: &;
+  &__menu-wrapper {
+    flex-grow: 1;
+    background-color: #001529;
+    box-shadow: -1px 0px 9px -1px rgba(0,0,0,0.75);
+  }
+
+  &__wallet-avatar {
     position: relative;
     cursor: pointer;
+    background-color: #006d75;
+    color: #ffffff;
+  }
 
-    &_selected {
+  &__user-avatar {
+    position: relative;
+    cursor: pointer;
+    background-color: #d48806;
+    color: #ffffff;
+  }
+
+  &__question-avatar {
+    background-color: transparentize(#91d5ff, 0.9);
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  &__notifications-avatar {
+    background-color: transparentize(#91d5ff, 0.7);
+    cursor: pointer;
+  }
+
+  .active {
+    #{$self}__main-menu-item {
       &:before {
         content: '';
         position: absolute;
@@ -39,47 +61,17 @@
       }
     }
 
-    &_cyan {
-      background-color: #006d75;
-      color: #ffffff;
-
-      &#{$self}_selected {
-        &:before {
-          border: 4px solid #d48806;
-        }
+    #{$self}__wallet-avatar {
+      &:before {
+        border: 4px solid #d48806;
       }
     }
 
-    &_orange {
-      background-color: #d48806;
-      color: #ffffff;
-
-      &#{$self}_selected {
-        &:before {
-          border: 4px solid #006d75;
-        }
+    #{$self}__user-avatar,
+    #{$self}__question-avatar {
+      &:before {
+        border: 4px solid #006d75;
       }
-    }
-  }
-
-  &__menu-wrapper {
-    flex-grow: 1;
-    background-color: #001529;
-    box-shadow: -1px 0px 9px -1px rgba(0,0,0,0.75);
-  }
-
-  &__question-avatar {
-    background-color: transparentize(#91d5ff, 0.9);
-    margin-bottom: 20px;
-  }
-
-  &__notifications-avatar {
-    background-color: transparentize(#91d5ff, 0.7);
-  }
-
-  &__notification {
-    .ant-card-body {
-      padding: 14px;
     }
   }
 }

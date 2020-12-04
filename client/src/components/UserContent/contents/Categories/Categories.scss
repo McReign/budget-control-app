@@ -1,0 +1,9 @@
+.user-categories {
+  &__category-name-input-cell {
+    flex-grow: 1;
+  }
+
+  &__category-type-select {
+    min-width: 100px;
+  }
+}

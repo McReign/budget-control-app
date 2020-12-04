@@ -1,6 +1,7 @@
 import './WalletUsers.scss';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
     Card,
     Col,
@@ -15,22 +16,27 @@ import {
     Spin
 } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { isInviteLoadingSelector, walletUsersSelector } from '../../store/modules/wallets/selectors';
-import { ERROR_MESSAGE_DURATION, SUCCESS_MESSAGE_DURATION } from '../../constants/errors';
-import { userSelector } from '../../store/modules/user/selectors';
-import { getUsersRequest } from '../../api/users';
-import { inviteUser } from '../../store/modules/wallets/thunks';
+import { isInviteLoadingSelector, walletsSelector } from '../../../../store/modules/wallets/selectors';
+import { walletEnhancer, walletUsersEnhancer } from '../../../../store/modules/wallets/selectorEnhancers';
+import { SUCCESS_MESSAGE_DURATION } from '../../../../constants/errors';
+import { userSelector } from '../../../../store/modules/user/selectors';
+import { getUsersRequest } from '../../../../api/users';
+import { inviteUser } from '../../../../store/modules/wallets/thunks';
+import { handleErrors } from '../../../../utils/handleErrors';
 
 const INVITATION_SUCCESS_MESSAGE = 'Приглашение отправлено!';
 
-export const WalletUsers = ({ walletId }) => {
+export const WalletUsers = () => {
+    const { walletId } = useParams();
     const [foundUsers, setFoundUsers] = useState([]);
     const [selectedUserId, setSelectedUserId] = useState(null);
     const [isUsersSearching, setIsUsersSearching] = useState(false);
     const dispatch = useDispatch();
+
     const currentUser = useSelector(userSelector);
     const isInviteLoading = useSelector(isInviteLoadingSelector);
-    const walletUsers = useSelector(walletUsersSelector)(walletId);
+    const wallet = walletEnhancer(useSelector(walletsSelector))(walletId);
+    const walletUsers = walletUsersEnhancer(wallet);
 
     const handleUserInvite = () => {
         if (!selectedUserId) return;
@@ -39,14 +45,14 @@ export const WalletUsers = ({ walletId }) => {
                 message.success(INVITATION_SUCCESS_MESSAGE, SUCCESS_MESSAGE_DURATION);
                 setSelectedUserId(null);
             })
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION));
+            .catch(handleErrors(message));
     };
 
     const handleUserSearch = (search) => {
         setIsUsersSearching(true);
         getUsersRequest(search)
             .then(resp => setFoundUsers(resp.data.data?.users))
-            .catch(errors => message.error(errors?.common, ERROR_MESSAGE_DURATION))
+            .catch(handleErrors(message))
             .finally(() => setIsUsersSearching(false));
     };
 

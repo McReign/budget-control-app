@@ -9,6 +9,7 @@ const categorySchema = new mongoose.Schema({
   },
   slug: {
     type: String,
+    unique: 'Такая категория уже существует!',
     required: true,
   },
   type: {
@@ -16,6 +17,11 @@ const categorySchema = new mongoose.Schema({
     enum: Object.values(OperationType),
     required: true,
   },
+  users: [{
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    default: null,
+  }],
 });
 
 module.exports = connection.model('Category', categorySchema);

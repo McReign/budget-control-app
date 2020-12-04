@@ -10,6 +10,7 @@ module.exports = function mapOperation(operation) {
         amount: operation.amount,
         date: operation.date,
         note: operation.note,
+        tags: operation.tags,
         category: mapCategory(operation.category),
         wallet: mapWalletSimple(operation.wallet),
         user: mapUserSimple(operation.user),

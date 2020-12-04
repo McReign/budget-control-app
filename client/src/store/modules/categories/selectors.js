@@ -1,19 +1,31 @@
-export const errorsSelector = (state) => {
-    return state.categoriesState.error;
+export const personalCategoriesErrorsSelector = (state) => {
+    return state.categoriesState.personalCategories.error;
 };
 
-export const isLoadingSelector = (state) => {
-    return state.categoriesState.loading;
+export const personalCategoriesLoadingSelector = (state) => {
+    return state.categoriesState.personalCategories.loading;
 };
 
-export const categoriesSelector = (state) => {
-    return state.categoriesState.categories || [];
+export const addCategoryErrorsSelector = (state) => {
+    return state.categoriesState.addCategory.error;
 };
 
-export const incomeCategoriesSelector = (state) => {
-    return categoriesSelector(state).filter(category => category.type === 'INCOME');
+export const addCategoryLoadingSelector = (state) => {
+    return state.categoriesState.addCategory.loading;
 };
 
-export const expenseCategoriesSelector = (state) => {
-    return categoriesSelector(state).filter(category => category.type === 'EXPENSE');
+export const personalCategoriesSelector = (state) => {
+    return state.categoriesState.personalCategories.list || [];
+};
+
+export const walletCategoriesErrorsSelector = (state) => {
+    return state.categoriesState.walletCategories.error;
+};
+
+export const walletCategoriesLoadingSelector = (state) => {
+    return state.categoriesState.walletCategories.loading;
+};
+
+export const walletCategoriesSelector = (state) => {
+    return state.categoriesState.walletCategories.list || [];
 };

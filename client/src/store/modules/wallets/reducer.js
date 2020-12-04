@@ -25,6 +25,7 @@ const initialState = {
 export const walletsReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_WALLETS_START:
+            return { ...state, error: null };
         case ADD_OPERATION_START:
             return { ...state, loading: true, error: null };
         case GET_WALLET_OPERATIONS_START:
@@ -71,6 +72,7 @@ export const walletsReducer = (state = initialState, action) => {
         case INVITE_USER_SUCCESS:
             return { ...state, inviteLoading: false, inviteError: null };
         case GET_WALLETS_ERROR:
+            return { ...state, error: action.payload };
         case GET_WALLET_OPERATIONS_ERROR:
         case ADD_OPERATION_ERROR:
             return { ...state, loading: false, error: action.payload };

@@ -1,4 +1,4 @@
-.wallet-transactions {
+.wallet-summary {
   position: relative;
 
   .ant-tabs-nav-list {
@@ -8,8 +8,15 @@
   .ant-tabs-tab {
     display: flex;
     justify-content: center;
-    flex-grow: 1;
-    flex-shrink: 0;
+    width: 50% !important;
+    margin: 0;
+
+    & + .ant-tabs-tab {
+      margin-left: 10px;
+    }
+  }
+
+  &__divider {
     margin: 0;
   }
 }

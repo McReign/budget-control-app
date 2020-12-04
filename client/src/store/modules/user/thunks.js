@@ -8,17 +8,16 @@ import {
     logoutUserError,
     logoutUserStart,
     logoutUserSuccess,
-    getNotificationsError,
-    getNotificationsStart,
-    getNotificationsSuccess,
     registerUserError,
     registerUserStart,
     registerUserSuccess,
 } from './actions';
 import { loginRequest, getMeRequest, logoutRequest, registerRequest } from '../../../api/users';
-import { setAuthorizationToken } from '../../../utils/setAuthorizationToken';
-import { clearAuthorizationToken } from '../../../utils/clearAuthorizationToken';
-import { getNotificationsRequest } from '../../../api/notifications';
+import { setAuthorizationToken } from '../../../utils/authorization/setAuthorizationToken';
+import { clearAuthorizationToken } from '../../../utils/authorization/clearAuthorizationToken';
+import { getWallets } from '../wallets/thunks';
+import { getNotifications } from '../notifications/thunks';
+import { getPersonalCategories } from '../categories/thunks';
 
 export const loginUser = (email, password, remember) => {
     return dispatch => {
@@ -94,20 +93,13 @@ export const getUser = () => {
     };
 };
 
-export const getNotifications = () => {
+export const getUserData = () => {
     return dispatch => {
-        dispatch(getNotificationsStart());
-
-        return getNotificationsRequest()
-            .then(res => {
-                const notifications = res?.data?.data?.notifications;
-                dispatch(getNotificationsSuccess(notifications));
-                return Promise.resolve(notifications);
-            })
-            .catch(err => {
-                const errors = err?.response?.data?.errors;
-                dispatch(getNotificationsError(errors));
-                return Promise.reject(errors);
-            });
+        return Promise.all([
+            dispatch(getUser()),
+            dispatch(getWallets()),
+            dispatch(getNotifications()),
+            dispatch(getPersonalCategories()),
+        ]);
     };
 };

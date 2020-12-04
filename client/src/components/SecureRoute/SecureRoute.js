@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { getAuthorizationToken } from '../../utils/getAuthorizationToken';
+import { getAuthorizationToken } from '../../utils/authorization/getAuthorizationToken';
 
 export class SecureRoute extends Route {
     render() {

@@ -1,0 +1,56 @@
+.wallet-transactions {
+  position: relative;
+
+  .ant-tabs-nav-list {
+    width: 100% !important;
+  }
+
+  .ant-tabs-tab {
+    display: flex;
+    justify-content: center;
+    flex: 0 1 100%;
+    margin: 0;
+  }
+
+  &__divider {
+    margin: 0;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 20px !important;
+  }
+
+  &__title {
+    margin-bottom: 0 !important;
+  }
+
+  &__dated-operations-wrapper {
+    & + & {
+      margin-top: 16px;
+    }
+  }
+
+  &__dated-operations {
+    margin-top: 6px;
+  }
+
+  &__dated-operations-date {
+    padding: 0 12px;
+  }
+
+  &__category-tag {
+    display: inline-flex;
+    align-items: baseline;
+    padding: 4px 7px;
+
+    &-text {
+      font-size: 18px;
+    }
+
+    .ant-tag-close-icon {
+      font-size: 12px;
+    }
+  }
+}
