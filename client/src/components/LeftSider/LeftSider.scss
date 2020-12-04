@@ -12,14 +12,22 @@
     background-color: transparentize(#001529, 0.04);
   }
 
+  &__wallets {
+    flex-grow: 1;
+    overflow: auto;
+    margin-bottom: 10px;
+  }
+
   &__additional-info {
     margin-top: auto;
+    flex-shrink: 0;
   }
 
   &__menu-wrapper {
     flex-grow: 1;
     background-color: #001529;
     box-shadow: -1px 0px 9px -1px rgba(0,0,0,0.75);
+    overflow: auto;
   }
 
   &__wallet-avatar {

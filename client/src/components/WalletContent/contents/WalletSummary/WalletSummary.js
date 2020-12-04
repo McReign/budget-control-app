@@ -24,7 +24,7 @@ import {
     walletOperationsByUserEnhancer, walletOperationsByPeriodEnhancer,
 } from '../../../../store/modules/wallets/selectorEnhancers';
 import { withRubleSign } from '../../../../utils/withRubleSign';
-import { AddButton } from '../../../AddButton/AddButton';
+import { AddButtonRoundFixed } from '../../../AddButton/AddButtonRoundFixed/AddButtonRoundFixed';
 import { TransactionModalEdit } from '../../../TransactionModal/TransactionModalEdit';
 import { addOperation } from '../../../../store/modules/wallets/thunks';
 import { withNumberGroupSeparator } from '../../../../utils/withNumberGroupSeparator';
@@ -32,6 +32,7 @@ import { UsersSlider } from '../../../UsersSlider/UsersSlider';
 import { PeriodSlider } from '../../../PeriodSlider/PeriodSlider';
 import { WalletMenuKey } from '../../../LeftSider/menus/WalletMenu/WalletMenu';
 import { handleErrors } from '../../../../utils/handleErrors';
+import { AddButtonDefault } from '../../../AddButton/AddButtonDefault/AddButtonDefault';
 
 export const WalletSummary = () => {
     const { walletId } = useParams();
@@ -197,7 +198,7 @@ export const WalletSummary = () => {
     const renderForm = () => {
         return (
             <Row className='wallet-summary'>
-                <Col span={14}>
+                <Col span={24} lg={18} xl={14}>
                     <Row>
                         <Col span={24}>
                             <Typography.Title>Сводка</Typography.Title>
@@ -220,12 +221,19 @@ export const WalletSummary = () => {
                         <Col span={24}>
                             <Divider className='wallet-summary__divider' type='horizontal' />
                         </Col>
-                        <Col span={12}>{renderExpensesSumBlock()}</Col>
-                        <Col span={12}>{renderIncomesSumBlock()}</Col>
+                        <Col span={24} lg={12}>{renderExpensesSumBlock()}</Col>
+                        <Col span={24} lg={12}>{renderIncomesSumBlock()}</Col>
+                        <Col span={24}>
+                            <AddButtonDefault onClick={openAddModal}>
+                                Добавить транзакцию
+                            </AddButtonDefault>
+                        </Col>
                         <Col span={24}>{renderCategorizedSumsBlock()}</Col>
                     </Row>
                 </Col>
-                <AddButton className='wallet-summary__add-button' onClick={openAddModal} />
+                <Col span={24}>
+                    <AddButtonRoundFixed onClick={openAddModal} />
+                </Col>
                 <TransactionModalEdit
                     isNew={true}
                     visible={addModalVisible}

@@ -4,6 +4,14 @@
     color: #ffffff;
   }
 
+  &__users-row {
+    margin-bottom: -5px !important;
+  }
+
+  &__users-select-col {
+    flex-grow: 1;
+  }
+
   &__users-select {
     width: 100%;
   }

@@ -62,8 +62,8 @@ export const WalletUsers = () => {
 
     const renderInviteBlock = () => {
         return (
-            <Row gutter={10}>
-                <Col span={14}>
+            <Row className='wallet-users__users-row' gutter={[10, 10]}>
+                <Col className='wallet-users__users-select-col'>
                     <Select
                         className='wallet-users__users-select'
                         showSearch
@@ -89,7 +89,7 @@ export const WalletUsers = () => {
                         ))}
                     </Select>
                 </Col>
-                <Col span={6}>
+                <Col>
                     <Button
                         type="primary"
                         loading={isInviteLoading}
@@ -106,22 +106,28 @@ export const WalletUsers = () => {
         return (walletUsers && walletUsers.length ?
             walletUsers.map(({ id, displayName, email }) => (
                 <Card key={id} hoverable size='small'>
-                    <Space size={10} direction='horizontal'>
-                        <Avatar
-                            className='wallet-users__user-avatar'
-                            size='small'
-                            icon={<UserOutlined />}
-                        />
-                        <Space size={16} direction='horizontal'>
-                            <span>
-                                <Typography.Text strong>{displayName}</Typography.Text>
-                                {currentUser?.id === id && (
-                                    <Typography.Text type='secondary'>&nbsp;(Вы)</Typography.Text>
-                                )}
-                            </span>
+                    <Row gutter={16} align='middle'>
+                        <Col>
+                            <Row gutter={10} align='middle'>
+                                <Col>
+                                    <Avatar
+                                        className='wallet-users__user-avatar'
+                                        size='small'
+                                        icon={<UserOutlined />}
+                                    />
+                                </Col>
+                                <Col>
+                                    <Typography.Text strong>{displayName}</Typography.Text>
+                                    {currentUser?.id === id && (
+                                        <Typography.Text type='secondary'>&nbsp;(Вы)</Typography.Text>
+                                    )}
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col>
                             <Typography.Text type='secondary'>{email}</Typography.Text>
-                        </Space>
-                    </Space>
+                        </Col>
+                    </Row>
                 </Card>
             ))
             : <Empty description='Список пуст' />
@@ -131,7 +137,7 @@ export const WalletUsers = () => {
     const renderForm = () => {
         return (
             <Row className='wallet-users'>
-                <Col span={14}>
+                <Col span={24} lg={18} xl={14}>
                     <Row>
                         <Col span={24}>
                             <Typography.Title>Пользователи</Typography.Title>

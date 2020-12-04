@@ -1,14 +1,14 @@
-import './AddButton.scss';
+import './AddButtonRoundFixed.scss';
 import React from 'react';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import cn from 'classnames';
 
-export const AddButton = (props) => {
+export const AddButtonRoundFixed = (props) => {
     return (
         <Button
             {...props}
-            className={cn('add-button', props.className)}
+            className={cn('add-button-round-fixed', props.className)}
             type='primary'
             shape='circle'
             icon={<PlusOutlined />}

@@ -10,7 +10,7 @@ import { getFirstLetter } from '../../utils/getFirstLetter';
 import { WalletMenu } from './menus/WalletMenu/WalletMenu';
 import { UserMenu } from './menus/UserMenu/UserMenu';
 
-export const LeftSider = ({ wallets, user, notifications }) => {
+export const LeftSider = ({ wallets, user, notifications, collapseSider }) => {
     const [isNotificationDrawerVisible, setNotificationDrawerVisible] = useState(false);
 
     const openNotificationsDrawer = useCallback(() => {
@@ -26,7 +26,7 @@ export const LeftSider = ({ wallets, user, notifications }) => {
             <NotificationsDrawerWithStore visible={isNotificationDrawerVisible} onClose={closeNotificationsDrawer} />
             <div className='left-sider__main-menu-wrapper'>
                 <div className='left-sider__wallets'>
-                    <Space direction='vertical'>
+                    <Space className='left-sider__wallets-space' direction='vertical'>
                         {wallets.map(({ id }, index) => (
                             <NavLink key={id} to={`/wallets/${id}`}>
                                 <Avatar

@@ -28,7 +28,7 @@ import {
 import { walletCategoriesSelector } from '../../../../store/modules/categories/selectors';
 import { categoryEnhancer } from '../../../../store/modules/categories/selectorEnhancers';
 import { withRubleSign } from '../../../../utils/withRubleSign';
-import { AddButton } from '../../../AddButton/AddButton';
+import { AddButtonRoundFixed } from '../../../AddButton/AddButtonRoundFixed/AddButtonRoundFixed';
 import { TransactionModalEdit } from '../../../TransactionModal/TransactionModalEdit';
 import { addOperation } from '../../../../store/modules/wallets/thunks';
 import { withNumberGroupSeparator } from '../../../../utils/withNumberGroupSeparator';
@@ -40,6 +40,7 @@ import { sortArray } from '../../../../utils/sortArray';
 import { handleErrors } from '../../../../utils/handleErrors';
 import { PeriodSlider } from '../../../PeriodSlider/PeriodSlider';
 import { generatePeriod } from '../../../../utils/generatePeriod';
+import { AddButtonDefault } from '../../../AddButton/AddButtonDefault/AddButtonDefault';
 
 export const WalletTransactions = () => {
     const { walletId } = useParams();
@@ -262,7 +263,7 @@ export const WalletTransactions = () => {
     const renderForm = () => {
         return (
             <Row className='wallet-transactions'>
-                <Col span={14}>
+                <Col span={24} lg={18} xl={14}>
                     <Row gutter={[15, 10]} className='wallet-transactions__title-row'>
                         <Col span={24}>
                             <Typography.Title className='wallet-transactions__title'>Транзакции</Typography.Title>
@@ -300,10 +301,15 @@ export const WalletTransactions = () => {
                                 </Col>
                             </>
                         )}
+                        <Col span={24}>
+                            <AddButtonDefault onClick={openAddModal}>
+                                Добавить транзакцию
+                            </AddButtonDefault>
+                        </Col>
                         <Col span={24}>{renderTransactionsBlock()}</Col>
                     </Row>
                 </Col>
-                <AddButton className='wallet-transactions__add-button' onClick={openAddModal} />
+                <AddButtonRoundFixed className='wallet-transactions__add-button' onClick={openAddModal} />
                 <TransactionModalEdit
                     isNew={true}
                     visible={addModalVisible}

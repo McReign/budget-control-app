@@ -1,16 +1,52 @@
 .main-layout {
     height: 100%;
+    overflow-x: hidden;
+    position: relative;
+
+    &__backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        background-color: rgba(0, 0, 0, 0.45);
+        transition: background-color 0.2s;
+
+        &_hidden {
+            background-color: rgba(0, 0, 0, 0);
+            visibility: hidden;
+        }
+    }
 
     &__sider {
         background-color: transparent;
-        overflow: auto;
         height: 100vh;
         position: fixed;
         left: 0;
+        z-index: 1000;
     }
 
-    &__content {
+    &__content-layout {
         padding: 24px;
-        margin-left: 300px;
+        transform: translateX(300px);
+        transition: transform 0.2s;
+        width: 100%;
+        max-width: 100%;
+
+        &_full {
+            transform: translateX(0);
+        }
+
+        @media screen and (min-width: 992px) {
+            width: calc(100% - 300px);
+            max-width: calc(100% - 300px);
+        }
+    }
+
+    @media screen and (min-width: 992px) {
+        &__backdrop {
+            display: none;
+        }
     }
 }

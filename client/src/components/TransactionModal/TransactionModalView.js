@@ -1,6 +1,6 @@
 import './TransactionModal.scss';
 import React from 'react';
-import { Button, Descriptions, Modal, Space, Tag, Typography } from 'antd';
+import { Button, Col, Descriptions, Modal, Row, Space, Tag, Typography } from 'antd';
 import { withRubleSign } from '../../utils/withRubleSign';
 import { withNumberGroupSeparator } from '../../utils/withNumberGroupSeparator';
 import { toDisplayDate } from '../../utils/toDisplayDate';
@@ -46,17 +46,19 @@ export const TransactionModalView = ({ transaction, visible, onCancel }) => {
                     {transaction?.category?.displayName}
                 </Descriptions.Item>
                 <Descriptions.Item label="Пользователь" span={24}>
-                    <Space direction='horizontal'>
-                        <span>
+                    <Row gutter={10}>
+                        <Col>
                             <Typography.Text strong>{transaction?.user?.displayName}</Typography.Text>
                             {currentUser?.id === transaction?.user?.id && (
                                 <Typography.Text type='secondary'>&nbsp;(Вы)</Typography.Text>
                             )}
-                        </span>
-                        <Typography.Text type='secondary'>
-                            ({transaction?.user?.email})
-                        </Typography.Text>
-                    </Space>
+                        </Col>
+                        <Col>
+                            <Typography.Text type='secondary'>
+                                ({transaction?.user?.email})
+                            </Typography.Text>
+                        </Col>
+                    </Row>
                 </Descriptions.Item>
                 <Descriptions.Item label="Дата операции" span={24}>
                     {toDisplayDate(transaction?.date)}

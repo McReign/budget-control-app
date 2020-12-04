@@ -55,10 +55,10 @@ export const Categories = () => {
 
     const renderAddCategoryBlock = () => {
         return (
-            <Row gutter={10}>
-                <Col className='user-categories__category-name-input-cell'>
+            <Row className='user-categories__add-category-block' gutter={[10, 10]}>
+                <Col className='user-categories__add-category-name-input-cell'>
                     <Input
-                        className='user-categories__category-name-input'
+                        className='user-categories__add-category-name-input'
                         value={categoryName}
                         placeholder="Название категории..."
                         onChange={handleCategoryNameChange}
@@ -67,7 +67,7 @@ export const Categories = () => {
                 </Col>
                 <Col>
                     <Select
-                        className='user-categories__category-type-select'
+                        className='user-categories__add-category-type-select'
                         value={categoryType}
                         placeholder={'Тип операции...'}
                         onChange={handleCategoryTypeChange}
@@ -133,15 +133,15 @@ export const Categories = () => {
     const renderForm = () => {
         return (
             <Row className='user-categories'>
-                <Col span={16}>
+                <Col span={24} lg={18} xl={14}>
                     <Row>
                         <Col span={24}>
                             <Typography.Title>Категории</Typography.Title>
                         </Col>
                     </Row>
                     <Row gutter={[10, 15]}>
-                        <Col span={18}>{renderAddCategoryBlock()}</Col>
-                        <Col span={18}>{renderCategoriesList()}</Col>
+                        <Col span={24}>{renderAddCategoryBlock()}</Col>
+                        <Col span={24}>{renderCategoriesList()}</Col>
                     </Row>
                 </Col>
             </Row>

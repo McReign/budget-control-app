@@ -1,0 +1,16 @@
+.add-button-default {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & .anticon-plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 992px) {
+    display: none;
+  }
+}

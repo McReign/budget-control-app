@@ -25,7 +25,7 @@ export const HomePage = () => {
 
     return (
         <RequestWrapper requestStatus={requestStatus}>
-            <MainLayout sider={<LeftSiderWithStore />}>
+            <MainLayout leftSider={LeftSiderWithStore}>
                 <Switch>
                     <Route path='/wallets/:walletId/:tab?'>
                         <WalletContent />

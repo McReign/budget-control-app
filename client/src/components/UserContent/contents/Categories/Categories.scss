@@ -1,9 +1,15 @@
 .user-categories {
-  &__category-name-input-cell {
-    flex-grow: 1;
-  }
+  &__add-category {
+    &-block {
+      margin-bottom: -5px !important;
+    }
 
-  &__category-type-select {
-    min-width: 100px;
+    &-name-input-cell {
+      flex-grow: 1;
+    }
+
+    &-type-select {
+      min-width: 100px;
+    }
   }
 }
