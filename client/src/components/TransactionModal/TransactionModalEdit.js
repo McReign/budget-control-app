@@ -183,6 +183,7 @@ export const TransactionModalEdit = ({ isNew, transaction, visible, loading, onC
                                     showSearch
                                     placeholder={'Введите категорию...'}
                                     optionFilterProp='children'
+                                    notFoundContent={'Выберите тип опреции'}
                                     onChange={handleCategoryChange(typedCategories[ownTransaction.type] || [])}
                                 >
                                     {(typedCategories[ownTransaction.type] || []).map(category => (
