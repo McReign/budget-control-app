@@ -1,0 +1,45 @@
+.wallet-reports {
+  position: relative;
+
+  &__dated-operations-wrapper {
+    & + & {
+      margin-top: 16px;
+    }
+  }
+
+  &__dated-operations {
+    margin-top: 6px;
+
+    &-card {
+      &-row {
+        margin-bottom: -3px !important;
+      }
+    }
+  }
+
+  &__dated-operations-date {
+    padding: 0 12px;
+  }
+
+  &__block {
+    & + & {
+      margin-top: 26px;
+    }
+  }
+
+  &__divider {
+    margin: 20px 0 !important;
+
+    &-text {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  &__range-input,
+  &__operation-type-select,
+  &__users-select,
+  &__create-button,
+  &__print-button {
+    width: 100%;
+  }
+}

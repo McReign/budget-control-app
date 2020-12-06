@@ -5,6 +5,10 @@
     margin-bottom: 10px;
   }
 
+  &__buttons-row {
+    margin-bottom: -5px !important;
+  }
+
   &__tabs {
     .ant-tabs-nav-list {
       display: flex;

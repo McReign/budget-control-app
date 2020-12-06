@@ -58,7 +58,12 @@ export const LoginPage = () => {
                     </Form.Item>
 
                     <Form.Item noStyle>
-                        <Row justify='space-between' align='middle'>
+                        <Row
+                            className='login-page__buttons-row'
+                            justify='space-between'
+                            align='middle'
+                            gutter={[10, 10]}
+                        >
                             <Col>
                                 <Form.Item
                                     name="remember"
@@ -108,7 +113,7 @@ export const LoginPage = () => {
 
                     <Form.Item noStyle>
                         <Row gutter={10}>
-                            <Col span={12}>
+                            <Col span={24} lg={12}>
                                 <Form.Item
                                     label="Пароль"
                                     name="password"
@@ -117,7 +122,7 @@ export const LoginPage = () => {
                                     <Input.Password />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col span={24} lg={12}>
                                 <Form.Item
                                     label="Подтверждение пароля"
                                     name="repeatedPassword"
@@ -164,7 +169,7 @@ export const LoginPage = () => {
     return (
         <LoginLayout className={'login-page'}>
             <Row>
-                <Col offset={8} span={8}>
+                <Col span={24} lg={{ offset: 6, span: 12 }} xl={{ offset: 8, span: 8 }}>
                     <Tabs className='login-page__tabs'>
                         <Tabs.TabPane
                             className='login-page__tab'

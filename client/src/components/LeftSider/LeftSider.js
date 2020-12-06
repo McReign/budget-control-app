@@ -9,6 +9,7 @@ import { NotificationsDrawerWithStore } from '../NotificationsDrawer/Notificatio
 import { getFirstLetter } from '../../utils/getFirstLetter';
 import { WalletMenu } from './menus/WalletMenu/WalletMenu';
 import { UserMenu } from './menus/UserMenu/UserMenu';
+import { HelpMenu } from './menus/HelpMenu/HelpMenu';
 
 export const LeftSider = ({ wallets, user, notifications, collapseSider }) => {
     const [isNotificationDrawerVisible, setNotificationDrawerVisible] = useState(false);
@@ -80,6 +81,9 @@ export const LeftSider = ({ wallets, user, notifications, collapseSider }) => {
                     </Route>
                     <Route path='/user/:tab?'>
                         <UserMenu />
+                    </Route>
+                    <Route path='/help'>
+                        <HelpMenu />
                     </Route>
                 </Switch>
             </div>

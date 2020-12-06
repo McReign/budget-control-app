@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route, useParams, Redirect } from 'react-router-dom';
-import { Result } from 'antd';
 
 import { WalletSummary } from './contents/WalletSummary/WalletSummary';
 import { WalletTransactions } from './contents/WalletTransactions/WalletTransactions';
 import { WalletUsers } from './contents/WalletUsers/WalletUsers';
+import { WalletReports } from './contents/WalletReports/WalletReports';
 
 import { WalletMenuKey } from '../LeftSider/menus/WalletMenu/WalletMenu';
 import { getWalletData } from '../../store/modules/wallets/thunks';
@@ -40,11 +40,7 @@ export const WalletContent = () => {
                     <WalletTransactions />
                 </Route>
                 <Route path={`/wallets/:walletId/${WalletMenuKey.REPORTS}`}>
-                    <Result
-                        status="404"
-                        title="Страница не найдена"
-                        subTitle="Осталось совсем чуть-чуть. В следующих версиях будут добавлены отчеты."
-                    />
+                    <WalletReports />
                 </Route>
                 <Route path={`/wallets/:walletId/${WalletMenuKey.USERS}`}>
                     <WalletUsers />

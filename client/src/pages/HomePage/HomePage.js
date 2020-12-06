@@ -7,6 +7,7 @@ import { getUserData } from '../../store/modules/user/thunks';
 import { LeftSiderWithStore } from '../../components/LeftSider/LeftSiderWithStore';
 import { WalletContent } from '../../components/WalletContent/WalletContent';
 import { UserContent } from '../../components/UserContent/UserContent';
+import { HelpContent } from '../../components/HelpContent/HelpContent';
 
 export const HomePage = () => {
     const dispatch = useDispatch();
@@ -32,6 +33,9 @@ export const HomePage = () => {
                     </Route>
                     <Route path='/user/:tab?'>
                         <UserContent />
+                    </Route>
+                    <Route path='/help'>
+                        <HelpContent />
                     </Route>
                 </Switch>
             </MainLayout>
