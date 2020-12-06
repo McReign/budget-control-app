@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const Koa = require('koa');
 const router = require('./router');
 
@@ -15,5 +16,10 @@ app.use(require('./middlewares/wallets'));
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+app.use(ctx => {
+    ctx.type = 'html';
+    ctx.body = fs.createReadStream(path.join(__dirname, '../client/build/index.html'));
+})
 
 module.exports = app;
