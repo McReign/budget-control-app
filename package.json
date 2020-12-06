@@ -7,7 +7,7 @@
     "url": "git+https://github.com/McReign/budget-control-app.git"
   },
   "scripts": {
-    "start": "cd client && npm run build && cd ../server && npm run start"
+    "start": "cd client && npm i && npm run build && cd ../server && npm i && npm run start"
   },
   "author": "Dmitry Manshin",
   "license": "ISC",
