@@ -7,8 +7,8 @@
     "url": "git+https://github.com/McReign/budget-control-app.git"
   },
   "scripts": {
-    "start": "cd client && npm i && npm run build && cd ../server && npm i && npm run start",
-    "heroku-postbuild": "npm run start"
+    "start": "cd ../server && npm i && npm run start",
+    "heroku-postbuild": "cd client && npm i && npm run build"
   },
   "author": "Dmitry Manshin",
   "license": "ISC",
