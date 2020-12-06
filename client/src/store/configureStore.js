@@ -1,6 +1,6 @@
 import { applyMiddleware, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
 import { userReducer } from './modules/user/reducer';
 import { walletsReducer } from './modules/wallets/reducer';
