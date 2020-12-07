@@ -43,7 +43,7 @@ export const MainLayout = ({ className, leftSider: LeftSider, children }) => {
                 <LeftSider collapseSider={handleCollapseSider} />
             </Sider>
             <Layout className={contentLayoutClassNames}>
-                <Content>{children}</Content>
+                <Content className='main-layout__content'>{children}</Content>
             </Layout>
         </Layout>
     );
