@@ -13,11 +13,13 @@ import { RequestWrapper } from '../RequestWrapper/RequestWrapper';
 import { mapStoreRequestStateToRequestStatus } from '../../utils/mapStoreRequestStateToRequestStatus';
 import { errorsSelector, isLoadingSelector, walletsSelector } from '../../store/modules/wallets/selectors';
 import { walletEnhancer } from '../../store/modules/wallets/selectorEnhancers';
+import { userSelector } from '../../store/modules/user/selectors';
 
 export const WalletContent = () => {
     const { walletId, tab } = useParams();
     const dispatch = useDispatch();
 
+    const currentUser = useSelector(userSelector);
     const isOperationsLoading = useSelector(isLoadingSelector);
     const operationsError = useSelector(errorsSelector);
     const wallet = walletEnhancer(useSelector(walletsSelector))(walletId);
@@ -25,6 +27,10 @@ export const WalletContent = () => {
     useEffect(() => {
         dispatch(getWalletData(walletId));
     }, [walletId]);
+
+    if (!walletId) {
+        return <Redirect to={`/wallets/${currentUser?.activeWallet}/${WalletMenuKey.SUMMARY}`} />;
+    }
 
     if (!tab) {
         return <Redirect to={`/wallets/${walletId}/${WalletMenuKey.SUMMARY}`} />;

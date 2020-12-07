@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Switch, Route } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
 import { MainLayout } from '../layouts/MainLayout/MainLayout'
 import { RequestStatus, RequestWrapper } from '../../components/RequestWrapper/RequestWrapper';
 import { getUserData } from '../../store/modules/user/thunks';
@@ -8,14 +8,16 @@ import { LeftSiderWithStore } from '../../components/LeftSider/LeftSiderWithStor
 import { WalletContent } from '../../components/WalletContent/WalletContent';
 import { UserContent } from '../../components/UserContent/UserContent';
 import { HelpContent } from '../../components/HelpContent/HelpContent';
+import { WalletMenuKey } from '../../components/LeftSider/menus/WalletMenu/WalletMenu';
+import { userSelector } from '../../store/modules/user/selectors';
 
 export const HomePage = () => {
+    const { pathname } = useLocation();
     const dispatch = useDispatch();
+
     const [requestStatus, setRequestStatus] = useState(null);
 
-    useEffect(() => {
-        fetchUserData();
-    }, []);
+    const currentUser = useSelector(userSelector);
 
     const fetchUserData = () => {
         setRequestStatus(RequestStatus.LOADING);
@@ -23,6 +25,14 @@ export const HomePage = () => {
             .then(() => setRequestStatus(RequestStatus.LOADED))
             .catch(() => setRequestStatus(RequestStatus.ERROR));
     };
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    if (pathname === '/' && requestStatus === RequestStatus.LOADED) {
+        return <Redirect to={`/wallets/${currentUser?.activeWallet}/${WalletMenuKey.SUMMARY}`} />;
+    }
 
     return (
         <RequestWrapper requestStatus={requestStatus}>

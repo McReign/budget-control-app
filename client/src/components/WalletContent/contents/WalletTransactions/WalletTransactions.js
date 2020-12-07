@@ -292,15 +292,15 @@ export const WalletTransactions = () => {
                                     <Divider className='wallet-transactions__divider' type='horizontal' />
                                 </Col>
                                 <Col span={24}>{renderUsersSlider()}</Col>
-                                <Col span={24}>
-                                    <Divider className='wallet-transactions__divider' type='horizontal' />
-                                </Col>
-                                <Col span={24}>{renderPeriodSlider()}</Col>
-                                <Col span={24}>
-                                    <Divider className='wallet-transactions__divider' type='horizontal' />
-                                </Col>
                             </>
                         )}
+                        <Col span={24}>
+                            <Divider className='wallet-transactions__divider' type='horizontal' />
+                        </Col>
+                        <Col span={24}>{renderPeriodSlider()}</Col>
+                        <Col span={24}>
+                            <Divider className='wallet-transactions__divider' type='horizontal' />
+                        </Col>
                         <Col span={24}>
                             <AddButtonDefault onClick={openAddModal}>
                                 Добавить транзакцию
