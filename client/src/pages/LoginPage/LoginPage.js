@@ -29,7 +29,8 @@ export const LoginPage = () => {
 
     const onRegisterFinish = ({ email, displayName, password }) => {
         dispatch(registerUser(email, displayName, password))
-            .then(() => history.push('/'))
+            .then(() => dispatch(getUser()))
+            .then((user) => history.push(`/wallets/${user?.activeWallet}`))
             .catch(handleErrors(message));
     };
 
