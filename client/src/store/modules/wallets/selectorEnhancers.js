@@ -29,6 +29,25 @@ export const walletOperationsByTypeEnhancer = (operations) => (type) => {
     return operations.filter(operation => operation.type === type);
 };
 
+export const walletOperationsByCategoriesEnhancer = (operations) => (categories) => {
+    const categorizedOperations = walletCategorizedOperationsEnhancer(operations) || {};
+    return uniqBy(
+        (categories || []).reduce((acc, slug) => ([
+            ...acc,
+            ...(categorizedOperations[slug] || []),
+        ]), []),
+        operation => operation?.id
+    );
+};
+
+export const walletOperationsByTagsEnhancer = (operations) => (tags) => {
+    const taggedOperations = walletTaggedOperationsEnhancer(operations) || {};
+    return uniq((tags || []).reduce((acc, tag) => ([
+        ...acc,
+        ...(taggedOperations[tag] || []),
+    ]), []));
+};
+
 export const walletIncomesEnhancer = (operations) => {
     return operations.filter(operation => operation.type === 'INCOME');
 };

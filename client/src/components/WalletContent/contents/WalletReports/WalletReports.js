@@ -36,7 +36,10 @@ import {
     walletUsedCategoriesEnhancer,
     walletUsedCategoriesSumsEnhancer,
     walletTaggedOperationsEnhancer,
-    walletUsedTagsEnhancer, walletUsedTagsSumsEnhancer,
+    walletUsedTagsEnhancer,
+    walletUsedTagsSumsEnhancer,
+    walletOperationsByCategoriesEnhancer,
+    walletOperationsByTagsEnhancer,
 } from '../../../../store/modules/wallets/selectorEnhancers';
 import { withRubleSign } from '../../../../utils/withRubleSign';
 import { withNumberGroupSeparator } from '../../../../utils/withNumberGroupSeparator';
@@ -64,6 +67,8 @@ export const WalletReports = () => {
     const { walletId } = useParams();
 
     const [selectedUsers, setSelectedUsers] = useState(null);
+    const [selectedCategories, setSelectedCategories] = useState(null);
+    const [selectedTags, setSelectedTags] = useState(null);
     const [selectedOperationType, setSelectedOperationType] = useState(null);
     const [selectedPeriod, setSelectedPeriod] = useState([null, null]);
     
@@ -74,6 +79,8 @@ export const WalletReports = () => {
     
     const walletUsers = walletUsersEnhancer(wallet);
     const walletOperations = useSelector(walletOperationsSelector)(walletId);
+    const walletUsedCategories = walletUsedCategoriesEnhancer(walletOperations);
+    const walletUsedTags = walletUsedTagsEnhancer(walletOperations);
 
     const handleGenerateReport = async () => {
         setIsReportGenerating(true);
@@ -105,31 +112,43 @@ export const WalletReports = () => {
             tags: null,
         };
 
-        const operationsByUsers = selectedUsers?.length ?
-            walletOperationsByUsersEnhancer(walletOperations)(selectedUsers)
+        const operationsByCategories = selectedCategories?.length ?
+            walletOperationsByCategoriesEnhancer(walletOperations)(selectedCategories)
             : walletOperations;
-        const operationsByUsersPeriod = walletOperationsByPeriodEnhancer(operationsByUsers)(selectedPeriod);
-        const operationsByUsersPeriodType = selectedOperationType ?
-            walletOperationsByTypeEnhancer(operationsByUsersPeriod)(selectedOperationType)
-            : operationsByUsersPeriod;
-        const expensesByUsersPeriodType = walletExpensesEnhancer(operationsByUsersPeriodType);
-        const incomesByUsersPeriodType = walletIncomesEnhancer(operationsByUsersPeriodType);
 
-        const usedOperationsTags = walletUsedTagsEnhancer(operationsByUsersPeriodType);
-        const usedExpenseTags = walletUsedTagsEnhancer(expensesByUsersPeriodType);
-        const usedIncomeTags = walletUsedTagsEnhancer(incomesByUsersPeriodType);
+        const operationsByTags = selectedTags?.length ?
+            walletOperationsByTagsEnhancer(operationsByCategories)(selectedTags)
+            : operationsByCategories;
 
-        const usedOperationsTagsSums = walletUsedTagsSumsEnhancer(operationsByUsersPeriodType);
-        const usedExpenseTagsSums = walletUsedTagsSumsEnhancer(expensesByUsersPeriodType);
-        const usedIncomeTagsSums = walletUsedTagsSumsEnhancer(incomesByUsersPeriodType);
+        const operationsByUsers = selectedUsers?.length ?
+            walletOperationsByUsersEnhancer(operationsByTags)(selectedUsers)
+            : operationsByTags;
 
-        const usedExpenseCategories = walletUsedCategoriesEnhancer(expensesByUsersPeriodType);
-        const usedExpenseCategoriesSums = walletUsedCategoriesSumsEnhancer(expensesByUsersPeriodType);
-        const usedIncomeCategories = walletUsedCategoriesEnhancer(incomesByUsersPeriodType);
-        const usedIncomeCategoriesSums = walletUsedCategoriesSumsEnhancer(incomesByUsersPeriodType);
+        const operationsByPeriod = walletOperationsByPeriodEnhancer(operationsByUsers)(selectedPeriod);
 
-        const datedExpensesByUsersPeriodType = walletDatedOperations(expensesByUsersPeriodType);
-        const datedIncomesByUsersPeriodType = walletDatedOperations(incomesByUsersPeriodType);
+        const operationsByType = selectedOperationType ?
+            walletOperationsByTypeEnhancer(operationsByPeriod)(selectedOperationType)
+            : operationsByPeriod;
+
+        const expenses = walletExpensesEnhancer(operationsByType);
+        const incomes = walletIncomesEnhancer(operationsByType);
+
+        const usedOperationsTags = walletUsedTagsEnhancer(operationsByType);
+        const usedExpenseTags = walletUsedTagsEnhancer(expenses);
+        const usedIncomeTags = walletUsedTagsEnhancer(incomes);
+
+        const usedOperationsTagsSums = walletUsedTagsSumsEnhancer(operationsByType);
+        const usedExpenseTagsSums = walletUsedTagsSumsEnhancer(expenses);
+        const usedIncomeTagsSums = walletUsedTagsSumsEnhancer(incomes);
+
+        const usedExpenseCategories = walletUsedCategoriesEnhancer(expenses);
+        const usedIncomeCategories = walletUsedCategoriesEnhancer(incomes);
+
+        const usedExpenseCategoriesSums = walletUsedCategoriesSumsEnhancer(expenses);
+        const usedIncomeCategoriesSums = walletUsedCategoriesSumsEnhancer(incomes);
+
+        const datedExpensesByUsersPeriodType = walletDatedOperations(expenses);
+        const datedIncomesByUsersPeriodType = walletDatedOperations(incomes);
 
         if (selectedOperationType === 'EXPENSE') {
             generatedReport.transactions = {
@@ -137,7 +156,7 @@ export const WalletReports = () => {
                     expenses: datedExpensesByUsersPeriodType,
                 },
                 sums: {
-                    expenses: walletOperationsSumEnhancer(expensesByUsersPeriodType),
+                    expenses: walletOperationsSumEnhancer(expenses),
                 }
             };
             generatedReport.categories = {
@@ -160,7 +179,7 @@ export const WalletReports = () => {
                     incomes: datedIncomesByUsersPeriodType,
                 },
                 sums: {
-                    incomes: walletOperationsSumEnhancer(incomesByUsersPeriodType),
+                    incomes: walletOperationsSumEnhancer(incomes),
                 }
             };
             generatedReport.categories = {
@@ -184,8 +203,8 @@ export const WalletReports = () => {
                     incomes: datedIncomesByUsersPeriodType,
                 },
                 sums: {
-                    expenses: walletOperationsSumEnhancer(expensesByUsersPeriodType),
-                    incomes: walletOperationsSumEnhancer(incomesByUsersPeriodType),
+                    expenses: walletOperationsSumEnhancer(expenses),
+                    incomes: walletOperationsSumEnhancer(incomes),
                 }
             };
             generatedReport.categories = {
@@ -207,14 +226,14 @@ export const WalletReports = () => {
         }
         
         return new Promise(res => setTimeout(() => res(generatedReport), 800));
-    }, [selectedUsers, selectedPeriod, selectedOperationType, walletOperations]);
+    }, [selectedUsers, selectedPeriod, selectedOperationType, walletOperations, selectedTags, selectedCategories]);
 
     const getSortedDates = (dates, fromMinToMax) => sortArray(
         dates,
         date => moment(date, DISPLAY_DATE_FORMAT),
         fromMinToMax ? SortDirection.ASC : SortDirection.DESC,
     );
-    const getSortedTransactions = transactions => sortArray(transactions, transaction => moment(transaction.date));
+    const getSortedTransactions = transactions => sortArray(transactions, transaction => moment(transaction?.date));
 
     const renderTransactions = (datedTransactions) => {
         const dates = (datedTransactions && Object.keys(datedTransactions)) || [];
@@ -233,7 +252,7 @@ export const WalletReports = () => {
                             <Col>
                                 <Typography.Text type='secondary'>
                                     {withRubleSign(withNumberGroupSeparator(
-                                        walletOperationsSumEnhancer(datedTransactions[date] || []),
+                                        walletOperationsSumEnhancer(datedTransactions?.[date] || []),
                                         ' ',
                                     ))}
                                 </Typography.Text>
@@ -242,7 +261,7 @@ export const WalletReports = () => {
                     </Col>
                     <Col span={24}>
                         <div className='wallet-reports__dated-operations'>
-                            {getSortedTransactions((datedTransactions[date] || [])).map(transaction => (
+                            {getSortedTransactions((datedTransactions?.[date] || [])).map(transaction => (
                                 <Card key={transaction?.id} hoverable size='small'>
                                     <Row gutter={[10, 6]} className='wallet-reports__dated-operations-card-row'>
                                         <Col span={24}>
@@ -306,8 +325,8 @@ export const WalletReports = () => {
     const renderTransactionsBlock = () => {
         if (!generatedReport) return null;
 
-        const generatedDatedTransactions = generatedReport.transactions.types || {};
-        const generatedTransactionsSums = generatedReport.transactions.sums || {};
+        const generatedDatedTransactions = generatedReport?.transactions?.types || {};
+        const generatedTransactionsSums = generatedReport?.transactions?.sums || {};
         const existedOperationTypes = Object.keys(generatedDatedTransactions);
 
         return existedOperationTypes.map(type => (
@@ -319,19 +338,19 @@ export const WalletReports = () => {
                                 {type === 'incomes' ? 'Доходы' : 'Расходы'}
                             </Typography.Title>
                         </Col>
-                        {!!generatedTransactionsSums[type] && (
+                        {!!generatedTransactionsSums?.[type] && (
                             <Col>
                                 <Typography.Title level={4} type='secondary'>
-                                    {withRubleSign(withNumberGroupSeparator(generatedTransactionsSums[type], ' '))}
+                                    {withRubleSign(withNumberGroupSeparator(generatedTransactionsSums?.[type], ' '))}
                                 </Typography.Title>
                             </Col>
                         )}
                     </Row>
                 </Col>
                 {!!generatedTransactionsSums[type] && (() => {
-                    const dates = getSortedDates(Object.keys(generatedDatedTransactions[type] || {}), true);
+                    const dates = getSortedDates(Object.keys(generatedDatedTransactions?.[type] || {}), true);
                     const sumsByDate = dates.map(date => {
-                        return walletOperationsSumEnhancer(generatedDatedTransactions[type][date] || []);
+                        return walletOperationsSumEnhancer(generatedDatedTransactions?.[type]?.[date] || []);
                     });
                     return (
                         <Col className='wallet-reports__chart-col' span={24}>
@@ -366,7 +385,7 @@ export const WalletReports = () => {
                         <Col>
                             <Typography.Text strong>
                                 {withRubleSign(
-                                    withNumberGroupSeparator(categoriesSums[category?.slug], ' ')
+                                    withNumberGroupSeparator(categoriesSums?.[category?.slug] || 0, ' ')
                                 )}
                             </Typography.Text>
                         </Col>
@@ -380,8 +399,8 @@ export const WalletReports = () => {
     const renderCategoriesBlock = () => {
         if (!generatedReport) return null;
 
-        const generatedCategories = generatedReport.categories.types || {};
-        const generatedCategoriesSums = generatedReport.categories.sums || {};
+        const generatedCategories = generatedReport?.categories?.types || {};
+        const generatedCategoriesSums = generatedReport?.categories?.sums || {};
         const existedCategoriesTypes = Object.keys(generatedCategories);
 
         return existedCategoriesTypes.map(type => (
@@ -422,7 +441,7 @@ export const WalletReports = () => {
                         <Col>
                             <Typography.Text strong>
                                 {withRubleSign(
-                                    withNumberGroupSeparator(tagsSums[tag], ' ')
+                                    withNumberGroupSeparator(tagsSums?.[tag] || 0, ' ')
                                 )}
                             </Typography.Text>
                         </Col>
@@ -434,11 +453,11 @@ export const WalletReports = () => {
     };
 
     const renderTagsBlock = () => {
-        if (!generatedReport?.tags) return null;
+        if (!generatedReport) return null;
         return (
             <Row style={{ marginTop: 10 }}>
                 <Col span={24}>
-                    {renderTags(generatedReport.tags.list || [], generatedReport.tags.sums || {})}
+                    {renderTags(generatedReport?.tags?.list || [], generatedReport?.tags?.sums)}
                 </Col>
             </Row>
         );
@@ -505,6 +524,47 @@ export const WalletReports = () => {
                     </Select>
                 </Form.Item>
 
+                <Form.Item noStyle>
+                    <Row gutter={10}>
+                        <Col span={24} sm={12}>
+                            <Form.Item className='wallet-reports__categories' label="Категории" name="categories">
+                                <Select
+                                    className='wallet-reports__categories-select'
+                                    value={selectedCategories}
+                                    mode='multiple'
+                                    placeholder={'По умолчанию - Все'}
+                                    notFoundContent={null}
+                                    onChange={setSelectedCategories}
+                                >
+                                    {walletUsedCategories.map(category => (
+                                        <Select.Option key={category?.id} value={category?.slug}>
+                                            {category?.displayName}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={24} sm={12}>
+                            <Form.Item className='wallet-reports__tags' label="Тэги" name="tags">
+                                <Select
+                                    className='wallet-reports__tags-select'
+                                    value={selectedTags}
+                                    mode='multiple'
+                                    placeholder={'По умолчанию - Все'}
+                                    notFoundContent={null}
+                                    onChange={setSelectedTags}
+                                >
+                                    {walletUsedTags.map(tag => (
+                                        <Select.Option key={tag} value={tag}>
+                                            {tag}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form.Item>
+
                 <Form.Item className='wallet-reports__buttons' noStyle>
                     <Row gutter={10} className='wallet-reports__buttons-row'>
                         {!!generatedReport && (
@@ -565,12 +625,8 @@ export const WalletReports = () => {
                                 <Col span={24}>{renderTransactionsBlock()}</Col>
                                 <Col span={24}>{renderDivider('Категории')}</Col>
                                 <Col span={24}>{renderCategoriesBlock()}</Col>
-                                {!!generatedReport.tags && (
-                                    <>
-                                        <Col span={24}>{renderDivider('Теги')}</Col>
-                                        <Col span={24}>{renderTagsBlock()}</Col>
-                                    </>
-                                )}
+                                <Col span={24}>{renderDivider('Теги')}</Col>
+                                <Col span={24}>{renderTagsBlock()}</Col>
                             </>
                         )}
                     </Row>
