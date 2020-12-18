@@ -43,15 +43,15 @@ export const LeftSider = ({ wallets, user, notifications, collapseSider }) => {
                 </div>
                 <div className="left-sider__additional-info">
                     <Space direction='vertical' align='center'>
-                        <NavLink to={'/help'}>
-                            <Avatar
-                                className={cn('left-sider__question-avatar', 'left-sider__main-menu-item')}
-                                gap={4}
-                                size='large'
-                            >
-                                <QuestionOutlined />
-                            </Avatar>
-                        </NavLink>
+                        {/*<NavLink to={'/help'}>*/}
+                        {/*    <Avatar*/}
+                        {/*        className={cn('left-sider__question-avatar', 'left-sider__main-menu-item')}*/}
+                        {/*        gap={4}*/}
+                        {/*        size='large'*/}
+                        {/*    >*/}
+                        {/*        <QuestionOutlined />*/}
+                        {/*    </Avatar>*/}
+                        {/*</NavLink>*/}
                         <Badge count={notifications?.length}>
                             <Avatar
                                 className='left-sider__notifications-avatar'
